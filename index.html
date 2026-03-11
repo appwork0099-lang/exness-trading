@@ -7,10 +7,20 @@
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
 
 <!-- Firebase SDKs -->
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+<script>
+// Safety check - if Firebase fails to load, show login directly
+window.addEventListener('error', function(e) {
+  if (e.message && e.message.includes('firebase')) {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    const ls = document.getElementById('loginScreen');
+    if (ls) ls.classList.add('active');
+  }
+});
+</script>
 
 <style>
 :root{
@@ -326,7 +336,7 @@ body{font-family:'Cairo',sans-serif;background:var(--bg-primary);color:var(--tex
   <div class="top-bar">
     <div class="logo">EXNESS</div>
     <div class="balance-area" onclick="openPanel('accountPanel')">
-      <div class="balance-amount" id="balDisp">AED 10,000.00</div>
+      <div class="balance-amount" id="balDisp">AED 0.00</div>
       <div class="balance-label" style="display:flex;align-items:center;gap:4px;justify-content:center;">
         <span class="live-dot"></span>
         <span id="accTypeLabel">EXNESS · AED</span>
@@ -580,7 +590,7 @@ body{font-family:'Cairo',sans-serif;background:var(--bg-primary);color:var(--tex
     <!-- BALANCE -->
     <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:16px;text-align:center;margin-bottom:14px;">
       <div style="font-size:11px;color:var(--text-secondary);margin-bottom:4px;">💰 الرصيد الكلي</div>
-      <div style="font-size:28px;font-weight:900;color:var(--gold);direction:ltr;" id="accBalDisp">AED 10,000.00</div>
+      <div style="font-size:28px;font-weight:900;color:var(--gold);direction:ltr;" id="accBalDisp">AED 0.00</div>
     </div>
     <!-- STATS -->
     <div class="stat-grid" style="margin-bottom:14px;">
@@ -643,7 +653,7 @@ body{font-family:'Cairo',sans-serif;background:var(--bg-primary);color:var(--tex
     <!-- STEP 1: Enter Amount -->
     <div class="dep-step active" id="depStep1">
       <div class="modal-title">💳 إيداع الأموال</div>
-      <div style="font-size:13px;color:var(--text-secondary);margin-bottom:10px;text-align:center;">الرصيد الحالي: <strong id="depBalDisp" style="color:var(--green);">AED 10,000</strong></div>
+      <div style="font-size:13px;color:var(--text-secondary);margin-bottom:10px;text-align:center;">الرصيد الحالي: <strong id="depBalDisp" style="color:var(--green);">AED 0.00</strong></div>
       <label style="font-size:12px;color:var(--text-secondary);margin-bottom:6px;display:block;">أدخل مبلغ الإيداع (AED)</label>
       <input type="number" id="depAmtInp" class="inp-field" placeholder="مثال: 500" style="font-size:20px;text-align:center;font-family:'Orbitron',monospace;" oninput="updateDepCalc()"/>
       <div id="depCalc" style="background:var(--bg-card);border:1px solid var(--border);border-radius:10px;padding:12px;margin-bottom:4px;font-size:13px;display:none;">
@@ -743,7 +753,7 @@ body{font-family:'Cairo',sans-serif;background:var(--bg-primary);color:var(--tex
     <div class="modal-title">💰 سحب الأموال</div>
     <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:14px;text-align:center;">
       <div style="font-size:12px;color:var(--text-secondary);margin-bottom:4px;">الرصيد المتاح</div>
-      <div style="font-size:24px;font-weight:900;color:var(--green);direction:ltr;" id="wdBalDisp">AED 10,000</div>
+      <div style="font-size:24px;font-weight:900;color:var(--green);direction:ltr;" id="wdBalDisp">AED 0.00</div>
     </div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px;" id="wdMethods">
       <div onclick="selWD(this)" style="background:var(--bg-card);border:2px solid var(--blue);background:rgba(41,121,255,0.1);border-radius:10px;padding:12px;text-align:center;cursor:pointer;font-size:12px;"><div style="font-size:22px;margin-bottom:4px;">💳</div><div style="color:var(--blue-light);">Visa/MC</div></div>
@@ -825,10 +835,21 @@ const firebaseConfig = {
   measurementId: "G-KVY5NLHMFW"
 };
 
-firebase.initializeApp(firebaseConfig);
-const auth = firebase.auth();
-const db   = firebase.firestore();
-const rtdb = firebase.database();
+// Init Firebase safely
+let auth, db, rtdb;
+try {
+  firebase.initializeApp(firebaseConfig);
+  auth = firebase.auth();
+  db   = firebase.firestore();
+  rtdb = firebase.database();
+} catch(e) {
+  console.log('Firebase init error:', e);
+  // Show login screen if Firebase fails
+  setTimeout(() => {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.getElementById('loginScreen').classList.add('active');
+  }, 500);
+}
 
 // ===== ADMIN EMAIL (مخفي) =====
 const ADMIN_EMAIL = 'ahmdfthyalsyd3@gmail.com';
@@ -894,7 +915,7 @@ const CHAT_REPLIES=['شكراً لتواصلك مع EXNESS! سيتم الرد ق
 // ===== APP STATE =====
 let S = {
   user: null, uid: null, isAdmin: false, isDemo: true,
-  balance: 0, coins: 2450, streak: 0, dailyClaimed: new Set(),
+  balance: 0, coins: 0, streak: 0, dailyClaimed: new Set(),
   wins: 0, losses: 0, totalProfit: 0, totalLoss: 0,
   totalDeposited: 0, totalWithdrawn: 0,
   asset: ASSETS[0], amount: 4, timeIdx: 0,
@@ -906,7 +927,7 @@ let S = {
 let candleSecs=0, tradeTimer=null, chatIdx=0, schedAmt=4, schedDir='up', schedTimeIdx=0;
 
 // ===== FIREBASE AUTH LISTENER =====
-auth.onAuthStateChanged(async user => {
+if (auth) auth.onAuthStateChanged(async user => {
   if (user) {
     S.user = user;
     S.uid  = user.uid;
@@ -929,7 +950,7 @@ async function loadUserData() {
     if (doc.exists) {
       const d = doc.data();
       S.balance       = d.balance       || 0;
-      S.coins         = d.coins         || 2450;
+      S.coins         = d.coins         || 0;
       S.wins          = d.wins          || 0;
       S.losses        = d.losses        || 0;
       S.totalProfit   = d.totalProfit   || 0;
@@ -943,7 +964,7 @@ async function loadUserData() {
         name:    S.user.displayName || S.user.email.split('@')[0],
         email:   S.user.email,
         balance: 0,
-        coins:   2450,
+        coins:   0,
         wins: 0, losses: 0,
         totalProfit: 0, totalLoss: 0,
         totalDeposited: 0, totalWithdrawn: 0,
@@ -1001,6 +1022,7 @@ async function doLogin() {
   const email = document.getElementById('liEmail').value.trim();
   const pass  = document.getElementById('liPass').value;
   if (!email || !pass) { showAuthError('liErr','يرجى إدخال البريد وكلمة المرور'); return; }
+  if (!auth) { showAuthError('liErr','خطأ في الاتصال، أعد تحميل الصفحة'); return; }
   setLoginLoading('liBtn', true);
   try {
     await auth.signInWithEmailAndPassword(email, pass);
