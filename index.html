@@ -852,12 +852,21 @@ let candleSecs=0, tradeTimer=null, chatIdx=0, schedAmt=4, schedDir='up', schedTi
 
 // ===== FIREBASE AUTH LISTENER =====
 // Timeout fallback - if Firebase takes too long, go to login
+// Show login after 3 seconds max
 const authTimeout = setTimeout(() => {
   clearInterval(loadMsgTimer);
+  showScreen('loginScreen');
+}, 3000);
+
+// Also try immediately after 1 second
+setTimeout(() => {
   if (document.getElementById('loadingScreen').classList.contains('active')) {
-    showScreen('loginScreen');
+    try {
+      const u = auth.currentUser;
+      if (u === null) { clearTimeout(authTimeout); clearInterval(loadMsgTimer); showScreen('loginScreen'); }
+    } catch(e) { clearTimeout(authTimeout); clearInterval(loadMsgTimer); showScreen('loginScreen'); }
   }
-}, 6000);
+}, 1000);
 
 auth.onAuthStateChanged(async user => {
   clearTimeout(authTimeout);
