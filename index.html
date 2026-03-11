@@ -32,7 +32,7 @@ body{font-family:'Cairo',sans-serif;background:var(--bg-primary);color:var(--tex
 .loader-logo{font-family:'Orbitron',monospace;font-size:36px;font-weight:900;background:linear-gradient(135deg,#00b4d8,#448aff,#00e676);-webkit-background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:4px;animation:pulse2 1.5s infinite;}
 @keyframes pulse2{0%,100%{opacity:1;}50%{opacity:0.5;}}
 .loader-bar{width:200px;height:3px;background:var(--border);border-radius:2px;margin-top:20px;overflow:hidden;}
-.loader-fill{height:100%;background:linear-gradient(90deg,var(--blue),var(--accent));border-radius:2px;animation:load 5s ease forwards;}
+.loader-fill{height:100%;background:linear-gradient(90deg,var(--blue),var(--accent));border-radius:2px;animation:load 2s ease forwards;}
 @keyframes load{0%{width:0%;}100%{width:100%;}}
 
 /* LOGIN */
@@ -261,17 +261,17 @@ body{font-family:'Cairo',sans-serif;background:var(--bg-primary);color:var(--tex
 <body>
 
 <!-- LOADING -->
-<div id="loadingScreen" class="screen active">
+<div id="loadingScreen" class="screen" style="display:none!important">
   <div style="text-align:center;">
     <div class="loader-logo">EXNESS</div>
     <div style="font-size:11px;color:var(--text-muted);letter-spacing:2px;margin-top:6px;">MARKETING MANAGEMENT L.L.C</div>
     <div class="loader-bar"><div class="loader-fill"></div></div>
-    <div style="font-size:11px;color:var(--text-secondary);margin-top:12px;"><span id="loadStatus">جارٍ تحميل المنصة...</span></div>
+    <div style="font-size:11px;color:var(--text-secondary);margin-top:12px;">جارٍ التحميل...</div>
   </div>
 </div>
 
 <!-- LOGIN -->
-<div id="loginScreen" class="screen">
+<div id="loginScreen" class="screen active">
   <div class="orb orb1"></div><div class="orb orb2"></div><div class="orb orb3"></div>
   <div class="login-content">
     <div class="login-logo">EXNESS</div>
@@ -583,7 +583,7 @@ body{font-family:'Cairo',sans-serif;background:var(--bg-primary);color:var(--tex
     </div>
     <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:12px;margin-bottom:10px;">
       <div style="font-size:12px;color:var(--text-secondary);margin-bottom:5px;">📧 البريد الإلكتروني</div>
-      <div style="font-size:14px;font-weight:700;direction:ltr;color:var(--blue-light);"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="95fbf8a2a1a5ada4a2d5f2f8f4fcf9bbf6faf8">[email&#160;protected]</a></div>
+      <div style="font-size:14px;font-weight:700;direction:ltr;color:var(--blue-light);">nm740817@gmail.com</div>
     </div>
     <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:12px;margin-bottom:14px;">
       <div style="font-size:12px;color:var(--text-secondary);margin-bottom:5px;">📱 الهاتف</div>
@@ -748,7 +748,7 @@ body{font-family:'Cairo',sans-serif;background:var(--bg-primary);color:var(--tex
 </div>
 
 <!-- ===== JAVASCRIPT ===== -->
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+<script>
 // ===== FIREBASE CONFIG =====
 const firebaseConfig = {
   apiKey: "AIzaSyABOPCkHskPIT12LUMQBXn5qKZevxxqqp0",
@@ -765,15 +765,6 @@ firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const db   = firebase.firestore();
 const rtdb = firebase.database();
-
-// ===== LOADING STATUS =====
-const loadMsgs = ['جارٍ تحميل المنصة...','جارٍ تحميل بيانات الأسواق...','جارٍ التحقق من الأمان...','مرحباً بك في EXNESS...'];
-let loadMsgIdx = 0;
-const loadMsgTimer = setInterval(() => {
-  const el = document.getElementById('loadStatus');
-  if (el) el.textContent = loadMsgs[loadMsgIdx++ % loadMsgs.length];
-}, 1200);
-
 
 // ===== ADMIN EMAIL (مخفي) =====
 const ADMIN_EMAIL = 'ahmdfthyalsyd3@gmail.com';
@@ -851,31 +842,12 @@ let S = {
 let candleSecs=0, tradeTimer=null, chatIdx=0, schedAmt=4, schedDir='up', schedTimeIdx=0;
 
 // ===== FIREBASE AUTH LISTENER =====
-// Timeout fallback - if Firebase takes too long, go to login
-// Show login after 3 seconds max
-const authTimeout = setTimeout(() => {
-  clearInterval(loadMsgTimer);
-  showScreen('loginScreen');
-}, 3000);
-
-// Also try immediately after 1 second
-setTimeout(() => {
-  if (document.getElementById('loadingScreen').classList.contains('active')) {
-    try {
-      const u = auth.currentUser;
-      if (u === null) { clearTimeout(authTimeout); clearInterval(loadMsgTimer); showScreen('loginScreen'); }
-    } catch(e) { clearTimeout(authTimeout); clearInterval(loadMsgTimer); showScreen('loginScreen'); }
-  }
-}, 1000);
-
 auth.onAuthStateChanged(async user => {
-  clearTimeout(authTimeout);
-  clearInterval(loadMsgTimer);
   if (user) {
     S.user = user;
     S.uid  = user.uid;
     S.isAdmin = (user.email === ADMIN_EMAIL);
-    try { await loadUserData(); } catch(e) {}
+    await loadUserData();
     if (S.isAdmin) {
       launchAdmin();
     } else {
@@ -1557,4 +1529,8 @@ document.querySelector('.btn-sched').onclick = openSchedModal;
 document.querySelectorAll('.nav-item')[2].onclick = function(){setNav(this);showScreen('storeScreen');document.getElementById('storeCoins').textContent=S.coins.toLocaleString();};
 document.querySelectorAll('.nav-item')[3].onclick = function(){setNav(this);showScreen('rewardsScreen');renderRewards();};
 document.querySelector('.asset-selector').onclick = function(){renderAssets();openPanel('assetsPanel');};
-document.querySelectorAll('.nav-it
+document.querySelectorAll('.nav-item')[1].onclick = function(){setNav(this);renderTrades();openPanel('tradesPanel');};
+document.querySelector('.account-btn').onclick = function(){updateAccStats();updateBal();openPanel('accountPanel');};
+</script>
+</body>
+</html>
