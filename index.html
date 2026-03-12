@@ -499,10 +499,11 @@ body{font-family:'Cairo',sans-serif;background:var(--bg-primary);color:var(--tex
     <button onclick="adminLogout()" style="margin-right:auto;background:rgba(255,255,255,0.15);border:none;border-radius:8px;color:white;padding:6px 14px;font-size:12px;font-family:'Cairo',sans-serif;cursor:pointer;">خروج</button>
   </div>
   <!-- ADMIN TABS -->
-  <div style="display:flex;background:#0a0e1a;border-bottom:1px solid var(--border);flex-shrink:0;">
-    <div class="admin-tab active" id="atab1" onclick="switchAdminTab(1)" style="flex:1;padding:10px;text-align:center;font-size:12px;font-weight:700;cursor:pointer;border-bottom:2px solid var(--red);color:white;">📊 الرئيسية</div>
-    <div class="admin-tab" id="atab2" onclick="switchAdminTab(2)" style="flex:1;padding:10px;text-align:center;font-size:12px;font-weight:700;cursor:pointer;border-bottom:2px solid transparent;color:var(--text-secondary);">👥 المستخدمون</div>
-    <div class="admin-tab" id="atab3" onclick="switchAdminTab(3)" style="flex:1;padding:10px;text-align:center;font-size:12px;font-weight:700;cursor:pointer;border-bottom:2px solid transparent;color:var(--text-secondary);position:relative;">💳 الإيداعات<span id="depBadge" style="position:absolute;top:4px;right:8px;background:var(--red);color:white;border-radius:50%;width:16px;height:16px;font-size:10px;display:none;align-items:center;justify-content:center;">0</span></div>
+  <div style="display:flex;background:#0a0e1a;border-bottom:1px solid var(--border);flex-shrink:0;overflow-x:auto;">
+    <div class="admin-tab active" id="atab1" onclick="switchAdminTab(1)" style="flex:1;min-width:60px;padding:10px 6px;text-align:center;font-size:11px;font-weight:700;cursor:pointer;border-bottom:2px solid var(--red);color:white;white-space:nowrap;">📊 الرئيسية</div>
+    <div class="admin-tab" id="atab2" onclick="switchAdminTab(2)" style="flex:1;min-width:60px;padding:10px 6px;text-align:center;font-size:11px;font-weight:700;cursor:pointer;border-bottom:2px solid transparent;color:var(--text-secondary);white-space:nowrap;">👥 المستخدمون</div>
+    <div class="admin-tab" id="atab3" onclick="switchAdminTab(3)" style="flex:1;min-width:60px;padding:10px 6px;text-align:center;font-size:11px;font-weight:700;cursor:pointer;border-bottom:2px solid transparent;color:var(--text-secondary);position:relative;white-space:nowrap;">💳 الإيداعات<span id="depBadge" style="position:absolute;top:4px;right:2px;background:var(--red);color:white;border-radius:50%;width:16px;height:16px;font-size:10px;display:none;align-items:center;justify-content:center;">0</span></div>
+    <div class="admin-tab" id="atab4" onclick="switchAdminTab(4)" style="flex:1;min-width:60px;padding:10px 6px;text-align:center;font-size:11px;font-weight:700;cursor:pointer;border-bottom:2px solid transparent;color:var(--text-secondary);position:relative;white-space:nowrap;">💸 السحوبات<span id="wdBadge" style="position:absolute;top:4px;right:2px;background:var(--red);color:white;border-radius:50%;width:16px;height:16px;font-size:10px;display:none;align-items:center;justify-content:center;">0</span></div>
   </div>
   <div style="flex:1;overflow-y:auto;padding-bottom:20px;">
 
@@ -564,6 +565,18 @@ body{font-family:'Cairo',sans-serif;background:var(--bg-primary);color:var(--tex
         </div>
       </div>
       <div id="adminDepList"><div style="text-align:center;padding:40px;color:var(--text-secondary);">جارٍ التحميل...</div></div>
+    </div>
+
+    <!-- TAB 4: WITHDRAWAL REQUESTS -->
+    <div id="adminTab4" style="display:none;">
+      <div style="padding:12px 16px 0;">
+        <div style="display:flex;gap:8px;margin-bottom:12px;">
+          <button onclick="filterWdReqs('pending')" id="wdFilterPending" style="flex:1;padding:8px;background:rgba(255,214,0,0.15);border:1px solid rgba(255,214,0,0.4);border-radius:8px;color:var(--gold);font-size:12px;font-weight:700;font-family:'Cairo',sans-serif;cursor:pointer;">⏳ قيد الانتظار</button>
+          <button onclick="filterWdReqs('approved')" id="wdFilterApproved" style="flex:1;padding:8px;background:var(--bg-card);border:1px solid var(--border);border-radius:8px;color:var(--text-secondary);font-size:12px;font-weight:700;font-family:'Cairo',sans-serif;cursor:pointer;">✅ مقبولة</button>
+          <button onclick="filterWdReqs('rejected')" id="wdFilterRejected" style="flex:1;padding:8px;background:var(--bg-card);border:1px solid var(--border);border-radius:8px;color:var(--text-secondary);font-size:12px;font-weight:700;font-family:'Cairo',sans-serif;cursor:pointer;">❌ مرفوضة</button>
+        </div>
+      </div>
+      <div id="adminWdList"><div style="text-align:center;padding:40px;color:var(--text-secondary);">جارٍ التحميل...</div></div>
     </div>
 
   </div>
@@ -766,21 +779,85 @@ body{font-family:'Cairo',sans-serif;background:var(--bg-primary);color:var(--tex
 
 <!-- WITHDRAW MODAL -->
 <div class="modal" id="withdrawModal">
-  <div class="modal-content">
+  <div class="modal-content" style="max-height:90vh;overflow-y:auto;">
     <div class="modal-title">💰 سحب الأموال</div>
-    <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:14px;text-align:center;">
-      <div style="font-size:12px;color:var(--text-secondary);margin-bottom:4px;">الرصيد المتاح</div>
-      <div style="font-size:24px;font-weight:900;color:var(--green);direction:ltr;" id="wdBalDisp">AED 0.00</div>
+
+    <!-- Balance -->
+    <div style="background:linear-gradient(135deg,var(--bg-card),rgba(0,230,118,0.05));border:1px solid rgba(0,230,118,0.2);border-radius:12px;padding:14px;margin-bottom:14px;text-align:center;">
+      <div style="font-size:11px;color:var(--text-secondary);margin-bottom:4px;">الرصيد المتاح للسحب</div>
+      <div style="font-size:26px;font-weight:900;color:var(--green);direction:ltr;" id="wdBalDisp">AED 0.00</div>
     </div>
+
+    <!-- Amount -->
+    <input type="number" id="wdAmtInp" class="inp-field" placeholder="أدخل مبلغ السحب (AED)" style="text-align:center;font-size:20px;font-family:'Orbitron',monospace;" oninput="onWdAmtChange()"/>
+    <div style="background:rgba(255,214,0,0.06);border:1px solid rgba(255,214,0,0.2);border-radius:8px;padding:8px;margin-bottom:14px;font-size:11px;color:var(--gold);text-align:center;">⚠️ الحد الأدنى: AED 10 · المدة: 1-3 أيام عمل</div>
+
+    <!-- Method Selection -->
+    <div style="font-size:12px;font-weight:700;color:var(--text-secondary);margin-bottom:8px;">اختر طريقة السحب</div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px;" id="wdMethods">
-      <div onclick="selWD(this)" style="background:var(--bg-card);border:2px solid var(--blue);background:rgba(41,121,255,0.1);border-radius:10px;padding:12px;text-align:center;cursor:pointer;font-size:12px;"><div style="font-size:22px;margin-bottom:4px;">💳</div><div style="color:var(--blue-light);">Visa/MC</div></div>
-      <div onclick="selWD(this)" style="background:var(--bg-card);border:2px solid var(--border);border-radius:10px;padding:12px;text-align:center;cursor:pointer;font-size:12px;"><div style="font-size:22px;margin-bottom:4px;">₿</div><div>كريبتو</div></div>
-      <div onclick="selWD(this)" style="background:var(--bg-card);border:2px solid var(--border);border-radius:10px;padding:12px;text-align:center;cursor:pointer;font-size:12px;"><div style="font-size:22px;margin-bottom:4px;">🏦</div><div>تحويل بنكي</div></div>
-      <div onclick="selWD(this)" style="background:var(--bg-card);border:2px solid var(--border);border-radius:10px;padding:12px;text-align:center;cursor:pointer;font-size:12px;"><div style="font-size:22px;margin-bottom:4px;">📱</div><div>Apple Pay</div></div>
+      <div onclick="selWD(this,'iban')" data-method="iban" style="background:rgba(41,121,255,0.1);border:2px solid var(--blue);border-radius:10px;padding:12px;text-align:center;cursor:pointer;font-size:12px;">
+        <div style="font-size:22px;margin-bottom:4px;">🏦</div><div style="color:var(--blue-light);font-weight:700;">IBAN / تحويل</div>
+        <div style="font-size:10px;color:var(--text-secondary);margin-top:2px;">حساب بنكي</div>
+      </div>
+      <div onclick="selWD(this,'paypal')" data-method="paypal" style="background:var(--bg-card);border:2px solid var(--border);border-radius:10px;padding:12px;text-align:center;cursor:pointer;font-size:12px;">
+        <div style="font-size:22px;margin-bottom:4px;">🅿️</div><div style="font-weight:700;">PayPal</div>
+        <div style="font-size:10px;color:var(--text-secondary);margin-top:2px;">محفظة PayPal</div>
+      </div>
+      <div onclick="selWD(this,'crypto')" data-method="crypto" style="background:var(--bg-card);border:2px solid var(--border);border-radius:10px;padding:12px;text-align:center;cursor:pointer;font-size:12px;">
+        <div style="font-size:22px;margin-bottom:4px;">₿</div><div style="font-weight:700;">كريبتو</div>
+        <div style="font-size:10px;color:var(--text-secondary);margin-top:2px;">USDT / BTC</div>
+      </div>
+      <div onclick="selWD(this,'visa')" data-method="visa" style="background:var(--bg-card);border:2px solid var(--border);border-radius:10px;padding:12px;text-align:center;cursor:pointer;font-size:12px;">
+        <div style="font-size:22px;margin-bottom:4px;">💳</div><div style="font-weight:700;">Visa/MC</div>
+        <div style="font-size:10px;color:var(--text-secondary);margin-top:2px;">بطاقة مصرفية</div>
+      </div>
     </div>
-    <input type="number" id="wdAmtInp" class="inp-field" placeholder="أدخل مبلغ السحب (AED)" style="text-align:center;font-size:18px;"/>
-    <div style="background:rgba(255,214,0,0.08);border:1px solid rgba(255,214,0,0.25);border-radius:10px;padding:10px;margin-bottom:14px;font-size:11px;color:var(--gold);text-align:center;">⚠️ الحد الأدنى: AED 10 · المدة: 1-3 أيام عمل</div>
-    <button class="mbtn mbtn-green" onclick="confirmWithdraw()">تأكيد السحب</button>
+
+    <!-- Dynamic Fields per method -->
+    <!-- IBAN Fields -->
+    <div id="wdFields_iban" style="display:block;">
+      <div style="font-size:12px;font-weight:700;color:var(--text-secondary);margin-bottom:8px;">🏦 بيانات الحساب البنكي</div>
+      <input type="text" id="wdIban" class="inp-field" placeholder="رقم IBAN (مثال: AE07 0331 2345 6789 0123 456)" style="font-size:13px;direction:ltr;letter-spacing:1px;"/>
+      <input type="text" id="wdBankName" class="inp-field" placeholder="اسم البنك" style="font-size:13px;"/>
+      <input type="text" id="wdAccName" class="inp-field" placeholder="اسم صاحب الحساب" style="font-size:13px;"/>
+    </div>
+
+    <!-- PayPal Fields -->
+    <div id="wdFields_paypal" style="display:none;">
+      <div style="font-size:12px;font-weight:700;color:var(--text-secondary);margin-bottom:8px;">🅿️ بيانات حساب PayPal</div>
+      <input type="email" id="wdPaypalEmail" class="inp-field" placeholder="البريد الإلكتروني لـ PayPal" style="font-size:13px;direction:ltr;"/>
+      <div style="background:rgba(0,112,186,0.08);border:1px solid rgba(0,112,186,0.2);border-radius:8px;padding:10px;margin-bottom:8px;font-size:11px;color:#4fc3f7;">
+        💡 تأكد أن الإيميل مرتبط بحساب PayPal نشط. المبلغ سيُحوَّل خلال 1-3 أيام عمل.
+      </div>
+    </div>
+
+    <!-- Crypto Fields -->
+    <div id="wdFields_crypto" style="display:none;">
+      <div style="font-size:12px;font-weight:700;color:var(--text-secondary);margin-bottom:8px;">₿ بيانات المحفظة</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px;">
+        <div onclick="selCrypto(this,'USDT')" style="background:rgba(38,161,123,0.1);border:2px solid rgba(38,161,123,0.5);border-radius:8px;padding:8px;text-align:center;cursor:pointer;font-size:12px;font-weight:700;color:#26a17b;">USDT (TRC20)</div>
+        <div onclick="selCrypto(this,'BTC')" style="background:var(--bg-card);border:2px solid var(--border);border-radius:8px;padding:8px;text-align:center;cursor:pointer;font-size:12px;font-weight:700;">BTC</div>
+        <div onclick="selCrypto(this,'ETH')" style="background:var(--bg-card);border:2px solid var(--border);border-radius:8px;padding:8px;text-align:center;cursor:pointer;font-size:12px;font-weight:700;">ETH</div>
+        <div onclick="selCrypto(this,'BNB')" style="background:var(--bg-card);border:2px solid var(--border);border-radius:8px;padding:8px;text-align:center;cursor:pointer;font-size:12px;font-weight:700;">BNB</div>
+      </div>
+      <input type="text" id="wdCryptoAddr" class="inp-field" placeholder="عنوان المحفظة" style="font-size:12px;direction:ltr;"/>
+      <div style="background:rgba(255,152,0,0.08);border:1px solid rgba(255,152,0,0.2);border-radius:8px;padding:8px;font-size:11px;color:#ff9800;">
+        ⚠️ تأكد من صحة العنوان والشبكة. المبالغ المُحوَّلة لعناوين خاطئة لا يمكن استردادها.
+      </div>
+    </div>
+
+    <!-- Visa Fields -->
+    <div id="wdFields_visa" style="display:none;">
+      <div style="font-size:12px;font-weight:700;color:var(--text-secondary);margin-bottom:8px;">💳 بيانات البطاقة</div>
+      <input type="text" id="wdCardNum" class="inp-field" placeholder="آخر 4 أرقام من البطاقة" maxlength="4" style="font-size:18px;text-align:center;letter-spacing:4px;font-family:'Orbitron',monospace;"/>
+      <input type="text" id="wdCardName" class="inp-field" placeholder="الاسم على البطاقة" style="font-size:13px;direction:ltr;"/>
+      <div style="background:rgba(41,121,255,0.08);border:1px solid rgba(41,121,255,0.2);border-radius:8px;padding:8px;font-size:11px;color:var(--blue-light);">
+        💡 يجب أن تكون البطاقة هي نفسها المستخدمة في الإيداع.
+      </div>
+    </div>
+
+    <div style="height:12px;"></div>
+    <button class="mbtn mbtn-green" onclick="confirmWithdraw()" id="wdConfirmBtn">💰 تأكيد طلب السحب</button>
     <button class="mbtn mbtn-cancel" onclick="closeModal('withdrawModal')">إلغاء</button>
   </div>
 </div>
@@ -1483,15 +1560,91 @@ function selectPayMethod(el,method){
 
 
 // ===== WITHDRAW =====
-function selWD(el){document.querySelectorAll('#wdMethods>div').forEach(d=>{d.style.borderColor='var(--border)';d.style.background='var(--bg-card)';d.style.color='';});el.style.borderColor='var(--red)';el.style.background='rgba(255,23,68,0.08)';}
+let selectedWdMethod = 'iban';
+let selectedCrypto = 'USDT';
+
+function onWdAmtChange(){}
+
+function selWD(el, method){
+  selectedWdMethod = method;
+  document.querySelectorAll('#wdMethods>div').forEach(d=>{
+    d.style.borderColor='var(--border)';
+    d.style.background='var(--bg-card)';
+  });
+  el.style.borderColor='var(--red)';
+  el.style.background='rgba(255,23,68,0.08)';
+  // Show relevant fields
+  ['iban','paypal','crypto','visa'].forEach(m=>{
+    const f = document.getElementById('wdFields_'+m);
+    if(f) f.style.display = m===method ? 'block' : 'none';
+  });
+}
+
+function selCrypto(el, coin){
+  selectedCrypto = coin;
+  document.querySelectorAll('#wdFields_crypto>div:first-child>div').forEach(d=>{
+    d.style.borderColor='var(--border)';
+    d.style.background='var(--bg-card)';
+    d.style.color='var(--text-primary)';
+  });
+  el.style.borderColor='rgba(38,161,123,0.5)';
+  el.style.background='rgba(38,161,123,0.1)';
+  el.style.color='#26a17b';
+}
+
 async function confirmWithdraw(){
-  const amt=parseFloat(document.getElementById('wdAmtInp').value);
-  if(!amt||amt<10){toast('الحد الأدنى AED 10','loss');return;}
-  if(amt>S.balance){toast('الرصيد غير كافٍ','loss');return;}
-  S.balance-=amt; S.totalWithdrawn+=amt;
-  closeModal('withdrawModal'); updateBal();
-  await saveUserData(); updateAdminStats();
-  toast(`✅ تم طلب سحب AED ${amt.toFixed(2)}!`,'win');
+  const amt = parseFloat(document.getElementById('wdAmtInp').value);
+  if(!amt || amt < 10){ toast('الحد الأدنى AED 10','loss'); return; }
+  if(amt > S.balance){ toast('الرصيد غير كافٍ','loss'); return; }
+
+  // Collect method-specific data
+  let details = {};
+  if(selectedWdMethod === 'iban'){
+    const iban = document.getElementById('wdIban').value.trim();
+    const bank = document.getElementById('wdBankName').value.trim();
+    const accName = document.getElementById('wdAccName').value.trim();
+    if(!iban || !bank || !accName){ toast('يرجى إدخال جميع بيانات الحساب البنكي','loss'); return; }
+    details = { iban, bank, accountName: accName };
+  } else if(selectedWdMethod === 'paypal'){
+    const email = document.getElementById('wdPaypalEmail').value.trim();
+    if(!email){ toast('يرجى إدخال إيميل PayPal','loss'); return; }
+    details = { paypalEmail: email };
+  } else if(selectedWdMethod === 'crypto'){
+    const addr = document.getElementById('wdCryptoAddr').value.trim();
+    if(!addr){ toast('يرجى إدخال عنوان المحفظة','loss'); return; }
+    details = { cryptoAddress: addr, cryptoType: selectedCrypto };
+  } else if(selectedWdMethod === 'visa'){
+    const card = document.getElementById('wdCardNum').value.trim();
+    const cardName = document.getElementById('wdCardName').value.trim();
+    if(!card || !cardName){ toast('يرجى إدخال بيانات البطاقة','loss'); return; }
+    details = { cardLast4: card, cardName };
+  }
+
+  const btn = document.getElementById('wdConfirmBtn');
+  btn.textContent = 'جارٍ الإرسال...'; btn.disabled = true;
+
+  try {
+    // Save withdrawal request to Firestore
+    await db.collection('withdrawRequests').add({
+      uid: S.uid,
+      name: S.user.displayName || S.user.email,
+      email: S.user.email,
+      amount: amt,
+      method: selectedWdMethod,
+      details: details,
+      status: 'pending',
+      createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+    });
+
+    // Deduct balance
+    S.balance -= amt; S.totalWithdrawn += amt;
+    updateBal(); await saveUserData(); updateAdminStats();
+    closeModal('withdrawModal');
+    toast(`✅ تم إرسال طلب سحب AED ${amt.toFixed(2)}! سيتم المراجعة خلال 1-3 أيام`, 'win');
+  } catch(e){
+    toast('حدث خطأ، حاول مرة أخرى','loss');
+  }
+  btn.textContent = '💰 تأكيد طلب السحب'; btn.disabled = false;
 }
 
 // ===== SCHEDULED TRADE =====
@@ -1614,15 +1767,16 @@ let currentDepUid = null;
 let currentDepAmt = 0;
 
 function switchAdminTab(n){
-  [1,2,3].forEach(i=>{
-    document.getElementById('adminTab'+i).style.display = i===n?'block':'none';
+  [1,2,3,4].forEach(i=>{
+    const tabContent = document.getElementById('adminTab'+i);
+    if(tabContent) tabContent.style.display = i===n?'block':'none';
     const tab = document.getElementById('atab'+i);
-    tab.style.borderBottomColor = i===n?'var(--red)':'transparent';
-    tab.style.color = i===n?'white':'var(--text-secondary)';
+    if(tab){ tab.style.borderBottomColor = i===n?'var(--red)':'transparent'; tab.style.color = i===n?'white':'var(--text-secondary)'; }
   });
   if(n===1) loadBonusRateAdmin();
   if(n===2) loadAdminUsers();
   if(n===3) loadDepositRequests();
+  if(n===4) loadWithdrawRequests();
 }
 
 function filterAdminUsers(q){
@@ -1833,6 +1987,113 @@ async function rejectDeposit(){
     closeModal('receiptModal');
     toast('❌ تم رفض طلب الإيداع','loss');
     loadDepositRequests();
+  } catch(e){ toast('حدث خطأ','loss'); }
+}
+
+// ===== WITHDRAW REQUESTS ADMIN =====
+let allWdReqs = [];
+let currentWdFilter = 'pending';
+let currentWdDocId = null;
+let currentWdUid = null;
+let currentWdAmt = 0;
+
+async function loadWithdrawRequests(){
+  document.getElementById('adminWdList').innerHTML='<div style="text-align:center;padding:40px;color:var(--text-secondary);">جارٍ التحميل...</div>';
+  try {
+    const snap = await db.collection('withdrawRequests').orderBy('createdAt','desc').get();
+    allWdReqs = [];
+    snap.forEach(doc => allWdReqs.push({id:doc.id, ...doc.data()}));
+    const pending = allWdReqs.filter(r=>r.status==='pending').length;
+    const badge = document.getElementById('wdBadge');
+    if(badge){ if(pending>0){badge.textContent=pending;badge.style.display='flex';}else{badge.style.display='none';} }
+    renderWdReqs(currentWdFilter);
+  } catch(e){
+    document.getElementById('adminWdList').innerHTML='<div style="padding:16px;color:var(--red);text-align:center;">خطأ في التحميل</div>';
+  }
+}
+
+function filterWdReqs(status){
+  currentWdFilter = status;
+  ['pending','approved','rejected'].forEach(s=>{
+    const btn = document.getElementById('wdFilter'+s.charAt(0).toUpperCase()+s.slice(1));
+    if(!btn) return;
+    const isActive = s===status;
+    btn.style.background = isActive?'rgba(255,214,0,0.15)':'var(--bg-card)';
+    btn.style.borderColor = isActive?'rgba(255,214,0,0.4)':'var(--border)';
+    btn.style.color = isActive?'var(--gold)':'var(--text-secondary)';
+  });
+  renderWdReqs(status);
+}
+
+function getMethodLabel(method){
+  const labels = {iban:'🏦 IBAN/تحويل', paypal:'🅿️ PayPal', crypto:'₿ كريبتو', visa:'💳 Visa/MC'};
+  return labels[method] || method;
+}
+
+function getMethodDetails(r){
+  if(!r.details) return '';
+  const d = r.details;
+  if(r.method==='iban') return `IBAN: ${d.iban||''}<br>البنك: ${d.bank||''}<br>الاسم: ${d.accountName||''}`;
+  if(r.method==='paypal') return `PayPal: ${d.paypalEmail||''}`;
+  if(r.method==='crypto') return `${d.cryptoType||'USDT'}: ${d.cryptoAddress||''}`;
+  if(r.method==='visa') return `البطاقة: ****${d.cardLast4||''}<br>الاسم: ${d.cardName||''}`;
+  return '';
+}
+
+function renderWdReqs(status){
+  const filtered = allWdReqs.filter(r=>r.status===status);
+  if(!filtered.length){
+    document.getElementById('adminWdList').innerHTML=`<div style="text-align:center;padding:40px;color:var(--text-secondary);">لا توجد طلبات</div>`;
+    return;
+  }
+  let html='';
+  filtered.forEach(r=>{
+    const date = r.createdAt ? new Date(r.createdAt.seconds*1000).toLocaleString('ar') : '';
+    const details = getMethodDetails(r);
+    html+=`<div style="background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:14px;margin:0 16px 10px;">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:10px;">
+        <div>
+          <div style="font-size:13px;font-weight:700;">${r.name||'مستخدم'}</div>
+          <div style="font-size:11px;color:var(--text-secondary);">${r.email||''}</div>
+          <div style="font-size:10px;color:var(--text-muted);">${date}</div>
+        </div>
+        <div style="text-align:left;">
+          <div style="font-size:18px;font-weight:900;color:var(--red);">AED ${(r.amount||0).toLocaleString('en',{minimumFractionDigits:2})}</div>
+          <div style="font-size:11px;color:${r.status==='pending'?'var(--gold)':r.status==='approved'?'var(--green)':'var(--red)'};">${r.status==='pending'?'⏳ انتظار':r.status==='approved'?'✅ مقبول':'❌ مرفوض'}</div>
+        </div>
+      </div>
+      <div style="background:var(--bg-primary);border-radius:8px;padding:10px;margin-bottom:10px;font-size:12px;line-height:1.8;">
+        <div style="color:var(--gold);font-weight:700;margin-bottom:4px;">${getMethodLabel(r.method)}</div>
+        <div style="color:var(--text-secondary);direction:ltr;">${details}</div>
+      </div>
+      ${r.status==='pending'?`<div style="display:flex;gap:8px;">
+        <button onclick="approveWithdraw('${r.id}','${r.uid||''}')" style="flex:1;padding:10px;background:linear-gradient(135deg,var(--green-dark),var(--green));border:none;border-radius:8px;color:white;font-size:13px;font-weight:700;font-family:'Cairo',sans-serif;cursor:pointer;">✅ قبول</button>
+        <button onclick="rejectWithdraw('${r.id}','${r.uid||''}',${r.amount||0})" style="flex:1;padding:10px;background:linear-gradient(135deg,#c0001a,var(--red));border:none;border-radius:8px;color:white;font-size:13px;font-weight:700;font-family:'Cairo',sans-serif;cursor:pointer;">❌ رفض وإعادة</button>
+      </div>`:''}
+    </div>`;
+  });
+  document.getElementById('adminWdList').innerHTML = html;
+}
+
+async function approveWithdraw(docId, uid){
+  try {
+    await db.collection('withdrawRequests').doc(docId).update({status:'approved', approvedAt: firebase.firestore.FieldValue.serverTimestamp()});
+    toast('✅ تم قبول طلب السحب!','win');
+    loadWithdrawRequests();
+  } catch(e){ toast('حدث خطأ','loss'); }
+}
+
+async function rejectWithdraw(docId, uid, amt){
+  try {
+    // Refund balance
+    if(uid){
+      const ref = db.collection('users').doc(uid);
+      const d = (await ref.get()).data();
+      await ref.update({balance:(d.balance||0)+amt});
+    }
+    await db.collection('withdrawRequests').doc(docId).update({status:'rejected', rejectedAt: firebase.firestore.FieldValue.serverTimestamp()});
+    toast('❌ تم رفض الطلب وإعادة المبلغ للمستخدم','info');
+    loadWithdrawRequests();
   } catch(e){ toast('حدث خطأ','loss'); }
 }
 
