@@ -428,7 +428,7 @@ body{font-family:'Cairo',sans-serif;background:var(--bg-primary);color:var(--tex
     <div class="nav-item" onclick="setNav(this);openPanel('tradesPanel')"><span class="nav-icon">↕️</span><span>الصفقات</span></div>
     <div class="nav-item" onclick="setNav(this);showScreen('storeScreen')"><span class="nav-icon">🛍️</span><span>المتجر</span></div>
     <div class="nav-item" onclick="setNav(this);showScreen('rewardsScreen')"><span class="nav-icon">🏆</span><span>المكافآت</span></div>
-    <div class="nav-item" onclick="setNav(this);openPanel('supportPanel')"><span class="nav-icon">💬</span><span>المساعدة</span></div>
+    <div class="nav-item" onclick="setNav(this);openPanel('supportPanel')"><span class="nav-icon">💬</span><span>Support</span></div>
   </div>
 </div>
 
@@ -455,7 +455,7 @@ body{font-family:'Cairo',sans-serif;background:var(--bg-primary);color:var(--tex
     <div class="nav-item" onclick="openPanel('tradesPanel')"><span class="nav-icon">↕️</span><span>الصفقات</span></div>
     <div class="nav-item active"><span class="nav-icon">🛍️</span><span>المتجر</span></div>
     <div class="nav-item" onclick="showScreen('rewardsScreen')"><span class="nav-icon">🏆</span><span>المكافآت</span></div>
-    <div class="nav-item" onclick="openPanel('supportPanel')"><span class="nav-icon">💬</span><span>المساعدة</span></div>
+    <div class="nav-item" onclick="openPanel('supportPanel')"><span class="nav-icon">💬</span><span>Support</span></div>
   </div>
 </div>
 
@@ -487,7 +487,7 @@ body{font-family:'Cairo',sans-serif;background:var(--bg-primary);color:var(--tex
     <div class="nav-item" onclick="openPanel('tradesPanel')"><span class="nav-icon">↕️</span><span>الصفقات</span></div>
     <div class="nav-item" onclick="showScreen('storeScreen')"><span class="nav-icon">🛍️</span><span>المتجر</span></div>
     <div class="nav-item active"><span class="nav-icon">🏆</span><span>المكافآت</span></div>
-    <div class="nav-item" onclick="openPanel('supportPanel')"><span class="nav-icon">💬</span><span>المساعدة</span></div>
+    <div class="nav-item" onclick="openPanel('supportPanel')"><span class="nav-icon">💬</span><span>Support</span></div>
   </div>
 </div>
 
@@ -520,6 +520,16 @@ body{font-family:'Cairo',sans-serif;background:var(--bg-primary);color:var(--tex
         <div class="admin-tog-row"><span>تفعيل السحب</span><div class="tog on" onclick="this.classList.toggle('on')"><div class="tog-thumb"></div></div></div>
         <div class="admin-tog-row"><span>وضع الصيانة</span><div class="tog" onclick="this.classList.toggle('on')"><div class="tog-thumb"></div></div></div>
         <div class="admin-tog-row"><span>وضع حلال</span><div class="tog on" onclick="this.classList.toggle('on')"><div class="tog-thumb"></div></div></div>
+        <!-- BONUS RATE CONTROL -->
+        <div style="margin-top:14px;background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:14px;">
+          <div style="font-size:12px;font-weight:700;color:var(--gold);margin-bottom:10px;">🎁 نسبة مكافأة الإيداع</div>
+          <div style="display:flex;align-items:center;gap:10px;">
+            <input type="number" id="bonusRateInp" placeholder="0" min="0" max="100" style="flex:1;padding:10px;background:var(--bg-primary);border:1px solid var(--border);border-radius:8px;color:var(--text-primary);font-size:16px;font-family:'Orbitron',monospace;text-align:center;outline:none;" value="0"/>
+            <span style="font-size:16px;font-weight:700;color:var(--gold);">%</span>
+            <button onclick="saveBonusRate()" style="padding:10px 16px;background:linear-gradient(135deg,var(--gold),#e65100);border:none;border-radius:8px;color:white;font-size:13px;font-weight:700;font-family:'Cairo',sans-serif;cursor:pointer;">حفظ</button>
+          </div>
+          <div style="font-size:11px;color:var(--text-secondary);margin-top:6px;" id="bonusRateStatus">النسبة الحالية: <span id="currentBonusRate">0</span>%</div>
+        </div>
       </div>
       <div class="admin-sec">
         <div class="admin-sec-title">📊 إحصائيات</div>
@@ -615,33 +625,20 @@ body{font-family:'Cairo',sans-serif;background:var(--bg-primary);color:var(--tex
 
 <!-- SUPPORT PANEL -->
 <div class="side-panel" id="supportPanel">
-  <div class="panel-header"><span class="panel-title">💬 الدعم الفني 24/7</span><span class="panel-close" onclick="closeAllPanels()">✕</span></div>
+  <div class="panel-header"><span class="panel-title">🎧 Support</span><span class="panel-close" onclick="closeAllPanels()">✕</span></div>
   <div style="padding:16px;">
-    <div style="background:linear-gradient(135deg,var(--blue),var(--accent));border-radius:14px;padding:18px;text-align:center;margin-bottom:14px;">
-      <div style="font-size:28px;margin-bottom:6px;">🎧</div>
-      <div style="font-size:15px;font-weight:700;">EXNESS Support</div>
-      <div style="font-size:11px;opacity:0.8;margin-top:4px;">متاح 24/7 لخدمتك</div>
+    <div style="background:linear-gradient(135deg,var(--blue),var(--accent));border-radius:14px;padding:24px;text-align:center;margin-bottom:20px;">
+      <div style="font-size:40px;margin-bottom:8px;">🎧</div>
+      <div style="font-size:16px;font-weight:900;">EXNESS Support</div>
+      <div style="font-size:12px;opacity:0.8;margin-top:6px;">متاح 24/7 لخدمتك</div>
     </div>
-    <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:12px;margin-bottom:10px;">
-      <div style="font-size:12px;color:var(--text-secondary);margin-bottom:5px;">📧 البريد الإلكتروني</div>
-      <div style="font-size:14px;font-weight:700;direction:ltr;color:var(--blue-light);"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="07696a3033373f363047606a666e6b2964686a">[email&#160;protected]</a></div>
+    <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:14px;padding:20px;margin-bottom:20px;text-align:center;">
+      <div style="font-size:13px;color:var(--text-secondary);margin-bottom:8px;">للتواصل مع فريق الدعم</div>
+      <div style="font-size:15px;font-weight:700;color:var(--blue-light);direction:ltr;">trendlin12@gmail.com</div>
     </div>
-    <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:12px;margin-bottom:14px;">
-      <div style="font-size:12px;color:var(--text-secondary);margin-bottom:5px;">📱 الهاتف</div>
-      <div style="font-size:14px;font-weight:700;direction:ltr;">+971-55-1579771</div>
-    </div>
-    <div id="chatMsgs" style="background:var(--bg-primary);border:1px solid var(--border);border-radius:12px;padding:12px;height:150px;overflow-y:auto;margin-bottom:10px;display:flex;flex-direction:column;gap:8px;">
-      <div style="background:var(--bg-panel);border-radius:10px 10px 10px 0;padding:10px 12px;max-width:85%;font-size:13px;">مرحباً بك في EXNESS! كيف يمكنني مساعدتك؟ 😊</div>
-    </div>
-    <div style="display:flex;gap:8px;margin-bottom:12px;">
-      <input type="text" id="chatInp" placeholder="اكتب رسالتك..." style="flex:1;padding:10px 14px;background:var(--bg-card);border:1px solid var(--border);border-radius:10px;color:var(--text-primary);font-size:13px;font-family:'Cairo',sans-serif;outline:none;" onkeypress="if(event.key==='Enter')sendChat()"/>
-      <button onclick="sendChat()" style="width:42px;height:42px;background:var(--blue);border:none;border-radius:10px;color:white;font-size:17px;cursor:pointer;">➤</button>
-    </div>
-    <div style="display:flex;gap:8px;">
-      <button onclick="window.open('mailto:nm740817@gmail.com')" style="flex:1;padding:10px;background:var(--bg-card);border:1px solid var(--border);border-radius:10px;color:var(--text-primary);font-size:11px;font-family:'Cairo',sans-serif;cursor:pointer;font-weight:700;">📧 إيميل</button>
-      <button onclick="window.open('tel:+971551579771')" style="flex:1;padding:10px;background:var(--bg-card);border:1px solid var(--border);border-radius:10px;color:var(--text-primary);font-size:11px;font-family:'Cairo',sans-serif;cursor:pointer;font-weight:700;">📞 اتصال</button>
-      <button onclick="window.open('https://wa.me/971551579771')" style="flex:1;padding:10px;background:rgba(37,211,102,0.15);border:1px solid rgba(37,211,102,0.3);border-radius:10px;color:#25d366;font-size:11px;font-family:'Cairo',sans-serif;cursor:pointer;font-weight:700;">💬 WhatsApp</button>
-    </div>
+    <button onclick="window.open('mailto:trendlin12@gmail.com','_blank')" style="width:100%;padding:16px;background:linear-gradient(135deg,var(--blue),var(--accent));border:none;border-radius:14px;color:white;font-size:15px;font-weight:700;font-family:'Cairo',sans-serif;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;">
+      <span style="font-size:20px;">📧</span> Support
+    </button>
   </div>
 </div>
 
@@ -650,15 +647,36 @@ body{font-family:'Cairo',sans-serif;background:var(--bg-primary);color:var(--tex
 <!-- DEPOSIT FLOW MODAL -->
 <div class="modal" id="depositModal">
   <div class="modal-content">
-    <!-- STEP 1: Enter Amount -->
+    <!-- STEP 1: Enter Amount + Confirmation Message -->
     <div class="dep-step active" id="depStep1">
       <div class="modal-title">💳 إيداع الأموال</div>
-      <div style="font-size:13px;color:var(--text-secondary);margin-bottom:10px;text-align:center;">الرصيد الحالي: <strong id="depBalDisp" style="color:var(--green);">AED 0.00</strong></div>
+      <div style="font-size:13px;color:var(--text-secondary);margin-bottom:12px;text-align:center;">الرصيد الحالي: <strong id="depBalDisp" style="color:var(--green);">AED 0.00</strong></div>
+
+      <!-- IMPORTANT NOTICE -->
+      <div style="background:rgba(255,152,0,0.08);border:2px solid rgba(255,152,0,0.4);border-radius:14px;padding:14px;margin-bottom:14px;">
+        <div style="font-size:13px;font-weight:900;color:#ff9800;margin-bottom:10px;text-align:center;">⚠️ يرجى التأكد من هذه المعلومات</div>
+        <div style="font-size:12px;color:var(--text-primary);line-height:2;margin-bottom:6px;">
+          <div style="display:flex;align-items:flex-start;gap:8px;margin-bottom:8px;">
+            <span style="color:#ff9800;font-size:14px;">💳</span>
+            <span>عند الدفع عبر <strong>Visa / Mastercard</strong> يرجى إرسال <strong>إيصال الدفع</strong> لتأكيد الإيداع</span>
+          </div>
+          <div style="display:flex;align-items:flex-start;gap:8px;">
+            <span style="color:#0070ba;font-size:14px;">🅿️</span>
+            <span>عند الدفع عبر <strong>PayPal</strong> يرجى <strong>تأكيد الدفع من داخل محفظتك</strong> على PayPal</span>
+          </div>
+        </div>
+        <div style="height:1px;background:rgba(255,152,0,0.2);margin:10px 0;"></div>
+        <label style="display:flex;align-items:center;gap:10px;cursor:pointer;padding:4px 0;" onclick="toggleDepConfirm()">
+          <div id="depConfirmBox" style="width:22px;height:22px;border-radius:6px;border:2px solid rgba(255,152,0,0.6);background:transparent;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all 0.2s;"></div>
+          <span style="font-size:12px;font-weight:700;color:var(--text-primary);">✅ تأكيد القراءة والموافقة</span>
+        </label>
+      </div>
+
       <label style="font-size:12px;color:var(--text-secondary);margin-bottom:6px;display:block;">أدخل مبلغ الإيداع (AED)</label>
       <input type="number" id="depAmtInp" class="inp-field" placeholder="مثال: 500" style="font-size:20px;text-align:center;font-family:'Orbitron',monospace;" oninput="updateDepCalc()"/>
       <div id="depCalc" style="background:var(--bg-card);border:1px solid var(--border);border-radius:10px;padding:12px;margin-bottom:4px;font-size:13px;display:none;">
         <div style="display:flex;justify-content:space-between;margin-bottom:6px;"><span style="color:var(--text-secondary);">المبلغ</span><span id="calcAmt" style="font-weight:700;">AED 0</span></div>
-        <div style="display:flex;justify-content:space-between;"><span style="color:var(--text-secondary);">مكافأة الإيداع</span><span id="calcBonus" style="color:var(--green);font-weight:700;">+AED 0</span></div>
+        <div style="display:flex;justify-content:space-between;"><span style="color:var(--text-secondary);">مكافأة الإيداع (<span id="bonusPctDisp">0</span>%)</span><span id="calcBonus" style="color:var(--green);font-weight:700;">+AED 0</span></div>
         <div style="height:1px;background:var(--border);margin:8px 0;"></div>
         <div style="display:flex;justify-content:space-between;"><span style="font-weight:700;">الإجمالي</span><span id="calcTotal" style="color:var(--gold);font-weight:900;font-size:16px;">AED 0</span></div>
       </div>
@@ -670,7 +688,7 @@ body{font-family:'Cairo',sans-serif;background:var(--bg-primary);color:var(--tex
         <div class="dep-amt-opt" onclick="setDepAmt(5000)">5,000</div>
         <div class="dep-amt-opt" onclick="setDepAmt(10000)">10,000</div>
       </div>
-      <button class="mbtn mbtn-green" onclick="goDepStep2()">التالي ←</button>
+      <button class="mbtn mbtn-green" id="depNextBtn" onclick="goDepStep2()" style="opacity:0.4;pointer-events:none;">التالي ←</button>
       <button class="mbtn mbtn-cancel" onclick="closeModal('depositModal')">إلغاء</button>
     </div>
 
@@ -683,11 +701,10 @@ body{font-family:'Cairo',sans-serif;background:var(--bg-primary);color:var(--tex
       </div>
       <div class="dep-methods">
         <div class="dep-method selected" onclick="selectPayMethod(this,'visa')"><div class="dep-method-icon">💳</div><div>Visa/MC</div></div>
+        <div class="dep-method" onclick="selectPayMethod(this,'paypal')"><div class="dep-method-icon">🅿️</div><div>PayPal</div></div>
         <div class="dep-method" onclick="selectPayMethod(this,'crypto')"><div class="dep-method-icon">₿</div><div>كريبتو</div></div>
         <div class="dep-method" onclick="selectPayMethod(this,'transfer')"><div class="dep-method-icon">🏦</div><div>تحويل</div></div>
         <div class="dep-method" onclick="selectPayMethod(this,'apple')"><div class="dep-method-icon">📱</div><div>Apple Pay</div></div>
-        <div class="dep-method" onclick="selectPayMethod(this,'skrill')"><div class="dep-method-icon">🌐</div><div>Skrill</div></div>
-        <div class="dep-method" onclick="selectPayMethod(this,'neteller')"><div class="dep-method-icon">💸</div><div>Neteller</div></div>
       </div>
       <button class="mbtn mbtn-blue" onclick="goToPayment()">تأكيد والدفع →</button>
       <button class="mbtn mbtn-cancel" onclick="goDepStep1()">← رجوع</button>
@@ -1110,6 +1127,7 @@ function launchApp() {
     document.getElementById('profileAvatar').textContent = initials;
     document.getElementById('avatarEmoji').textContent = initials;
   }
+  loadBonusRate();
   showScreen('appScreen');
   initChart();
   renderStore(); renderRewards(); renderIndicators();
@@ -1119,6 +1137,7 @@ function launchApp() {
 function launchAdmin() {
   updateAdminStats();
   loadAdminUsers();
+  loadBonusRateAdmin();
   showScreen('adminScreen');
   toast('مرحباً بالمسؤول 🛡️', 'win');
 }
@@ -1252,6 +1271,7 @@ function tick(){
 // ===== TRADE =====
 function placeTrade(dir){
   if(S.activeTrade){toast('يوجد صفقة جارية!','info');return;}
+  if(S.balance < S.amount){toast('رصيدك غير كافٍ! قم بالإيداع أولاً 💳','loss');return;}
   const dur=TIMES[S.timeIdx]*60;
   S.activeTrade={dir,entry:S.currentPrice,amount:S.amount,dur,rem:dur};
   S.balance-=S.amount; updateBal();
@@ -1324,6 +1344,11 @@ function openDepositFlow(){
   updateBal();
   document.getElementById('depAmtInp').value='';
   document.getElementById('depCalc').style.display='none';
+  // Reset confirmation checkbox
+  const box = document.getElementById('depConfirmBox');
+  if(box){ box.setAttribute('data-checked','0'); box.style.background='transparent'; box.style.borderColor='rgba(255,152,0,0.6)'; box.innerHTML=''; }
+  const btn = document.getElementById('depNextBtn');
+  if(btn){ btn.style.opacity='0.4'; btn.style.pointerEvents='none'; }
   goDepStep1();
   openModal('depositModal');
 }
@@ -1342,11 +1367,38 @@ function goToPayment(){
   ['depStep1','depStep2','depStep3','depStep4'].forEach(id=>{const e=document.getElementById(id);e.classList.toggle('active',id==='depStep3');});
 }
 
-function openStripeLink(){
-  if(STRIPE_LINK){
-    window.open(STRIPE_LINK,'_blank');
+const PAYPAL_LINK = 'https://www.paypal.com/ncp/payment/CP5FFTJ2FUSTQ';
+// STRIPE_LINK will be set when available
+
+function toggleDepConfirm(){
+  const box = document.getElementById('depConfirmBox');
+  const btn = document.getElementById('depNextBtn');
+  const confirmed = box.getAttribute('data-checked') === '1';
+  if(!confirmed){
+    box.setAttribute('data-checked','1');
+    box.style.background = 'var(--green)';
+    box.style.borderColor = 'var(--green)';
+    box.innerHTML = '<span style="color:white;font-size:14px;font-weight:900;">✓</span>';
+    btn.style.opacity = '1';
+    btn.style.pointerEvents = 'auto';
   } else {
-    toast('سيتم إضافة رابط الدفع قريباً','info');
+    box.setAttribute('data-checked','0');
+    box.style.background = 'transparent';
+    box.style.borderColor = 'rgba(255,152,0,0.6)';
+    box.innerHTML = '';
+    btn.style.opacity = '0.4';
+    btn.style.pointerEvents = 'none';
+  }
+}
+
+function openStripeLink(){
+  if(S.selectedPayMethod === 'paypal'){
+    window.open(PAYPAL_LINK, '_blank');
+  } else if(STRIPE_LINK){
+    window.open(STRIPE_LINK, '_blank');
+  } else {
+    // Open PayPal as default payment for now
+    window.open(PAYPAL_LINK, '_blank');
   }
 }
 
@@ -1398,11 +1450,23 @@ async function submitDepositRequest(){
   }
 }
 function setDepAmt(n){document.getElementById('depAmtInp').value=n;updateDepCalc();}
+
+// Admin-controlled bonus rate (loaded from Firestore)
+let DEPOSIT_BONUS_PCT = 0; // default 0%, admin sets it
+
+async function loadBonusRate(){
+  try {
+    const doc = await db.collection('settings').doc('deposit').get();
+    if(doc.exists) DEPOSIT_BONUS_PCT = doc.data().bonusPct || 0;
+  } catch(e){ DEPOSIT_BONUS_PCT = 0; }
+}
+
 function updateDepCalc(){
   const amt=parseFloat(document.getElementById('depAmtInp').value)||0;
   if(amt>0){
-    const bonus=amt>=1000?amt*0.3:amt>=500?amt*0.2:amt>=100?amt*0.1:0;
+    const bonus = amt * (DEPOSIT_BONUS_PCT / 100);
     document.getElementById('calcAmt').textContent='AED '+amt.toFixed(2);
+    document.getElementById('bonusPctDisp').textContent = DEPOSIT_BONUS_PCT;
     document.getElementById('calcBonus').textContent='+AED '+bonus.toFixed(2);
     document.getElementById('calcTotal').textContent='AED '+(amt+bonus).toFixed(2);
     document.getElementById('depCalc').style.display='block';
@@ -1410,6 +1474,9 @@ function updateDepCalc(){
 }
 function selectPayMethod(el,method){
   S.selectedPayMethod=method;
+  // Show PayPal hint
+  const hint=document.getElementById('paypalHint');
+  if(hint) hint.style.display=method==='paypal'?'block':'none';
   document.querySelectorAll('.dep-method').forEach(e=>{e.classList.remove('selected');});
   el.classList.add('selected');
 }
@@ -1553,6 +1620,7 @@ function switchAdminTab(n){
     tab.style.borderBottomColor = i===n?'var(--red)':'transparent';
     tab.style.color = i===n?'white':'var(--text-secondary)';
   });
+  if(n===1) loadBonusRateAdmin();
   if(n===2) loadAdminUsers();
   if(n===3) loadDepositRequests();
 }
@@ -1766,6 +1834,26 @@ async function rejectDeposit(){
     toast('❌ تم رفض طلب الإيداع','loss');
     loadDepositRequests();
   } catch(e){ toast('حدث خطأ','loss'); }
+}
+
+async function saveBonusRate(){
+  const pct = parseFloat(document.getElementById('bonusRateInp').value) || 0;
+  try {
+    await db.collection('settings').doc('deposit').set({ bonusPct: pct });
+    DEPOSIT_BONUS_PCT = pct;
+    document.getElementById('currentBonusRate').textContent = pct;
+    toast(`✅ تم حفظ نسبة المكافأة: ${pct}%`, 'win');
+  } catch(e){ toast('حدث خطأ', 'loss'); }
+}
+
+async function loadBonusRateAdmin(){
+  try {
+    const doc = await db.collection('settings').doc('deposit').get();
+    const pct = doc.exists ? (doc.data().bonusPct || 0) : 0;
+    document.getElementById('bonusRateInp').value = pct;
+    document.getElementById('currentBonusRate').textContent = pct;
+    DEPOSIT_BONUS_PCT = pct;
+  } catch(e){}
 }
 
 function sendAdminNotif(){
